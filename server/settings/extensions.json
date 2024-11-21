@@ -1,0 +1,13 @@
+{
+    "extensions": [{
+        "spotify": {
+            "enabled": true,
+            "lib": "extensions.spotify"
+        }
+    }, {
+        "leds": {
+            "enabled": true,
+            "lib": "extensions.leds"
+        }
+    }]
+}
