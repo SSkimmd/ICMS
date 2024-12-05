@@ -9,3 +9,4 @@ class Connection:
         self.id = id
         self.writer: asyncio.StreamWriter = writer
         self.reader: asyncio.StreamReader = reader
+        self.user: User = None

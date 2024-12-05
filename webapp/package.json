@@ -6,6 +6,7 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@iconify/svelte": "^4.0.2",
     "@sveltejs/adapter-auto": "^2",
     "@sveltejs/kit": "^1",
     "autoprefixer": "^10",

@@ -1,22 +1,39 @@
 import asyncio
+from asyncio import CancelledError
 import json as Json
 import parsers as parsers
+import sys
 from user import *
 
+
+# event system
+# subscribe to an event
+# ex. OnRecieved() will call all subscriptions when data is recieved
+# extensions can then use this to subscribe their own callbacks
 
 class Server:
     def __init__(self, extensions: map = {}, users: dict[str, Connection] = {}):
         self.users: dict[int, Connection] = users
         self.extensions: map = extensions
+        self.running = False
+        self.server = None
+
+    def close(self):
+        self.running = False
+        self.server.close()
 
     async def start(self):
-        server = await asyncio.start_server(self.update, '0.0.0.0', 8080)
+        self.server = await asyncio.start_server(self.update, '0.0.0.0', 8080)
+        self.running = True
 
-        async with server:
-            print('Stream Server Started...')
-            await server.serve_forever()
+        async with self.server:
+            try:
+                print('Stream Server Started...')
+                await self.server.serve_forever()
+            except CancelledError:
+                print("Server Closed")
 
-    async def build_response(self, extension_name):
+    async def get_extensions(self, extension_name):
         response = {}
 
         if extension_name == "all":     
@@ -45,18 +62,58 @@ class Server:
         if response:
             return (200, response)
         else:
-            return (400, response)      
+            return (400, response)
+
+    async def get_devices(self, device_name):
+        response = {}
+
+        if device_name == "all":
+            for device in self.users:
+                response[device] = {}
+                response[device]["functions"] = []
+        else:
+            if device_name not in self.users:
+                return(400, "ERROR: Device Not Found")
+
+            response[device_name] = {}
+            response[device_name]["functions"] = []
+
+        if response:
+            return (200, response)
+        else:
+            return (400, response)
 
     async def process_request(self, request):
         if request is not None:
-            if "type" not in request: return 'ERROR: Key Error type'
+            if "type" not in request: return 'ERROR: Key Error (type)'
 
+            #=================================== CONNECT ========================================================
+            if request["type"] == "CONNECT":
+                if "device-name" not in request and "id" not in request: 
+                    return (400, "ERROR: Multiple Key Errors")
+                
+                id = request["id"]
+                if id not in self.users:
+                    return (400, "ERROR: User ID Mismatch")
+
+                username = request["device-name"]
+                self.users[id].user = User(username)
+                return (200, f'SUCCESS: Connected With Device Name - {username}')
+
+            #==================================== GET =======================================================           
             if request["type"] == "GET":
-                if "module" not in request: return
-                response = await self.build_response(request["module"])
-                return response
+                if "module" not in request and "device" not in request: return
+
+                if "module" in request:
+                    response = await self.get_extensions(request["module"])
+                    return response
+                if "device" in request:
+                    response = await self.get_devices(request["device"])
+                    return response
+                
+            #==================================== POST =======================================================
             if request["type"] == "POST":
-                if "module" not in request or "function" not in request or "arguments" not in request: 
+                if "module" not in request and "function" not in request and "arguments" not in request: 
                     return (400, 'ERROR: Multiple Key Errors')
 
                 extension_name = request["module"]
@@ -88,12 +145,18 @@ class Server:
     async def update(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
         peername = writer.get_extra_info('peername')
         print('Connection From {}'.format(peername))
-        self.users[len(self.users)] = Connection(len(self.users), writer, reader)
 
-        while True:
+        #log user
+        user = Connection(len(self.users), writer, reader)
+        self.users[user.id] = user
+
+        while self.running:
             data = await reader.read(4096)
             
             if not data:
+                #remove user once they stop sending and recieving data
+                #this needs to only delete the current connection not user though eventually
+                del self.users[user.id]
                 break
 
             try:
@@ -115,9 +178,11 @@ class Server:
                 except:
                     continue
             else:
+                print(http_request.data)
                 try:
                     request_json = ''.join(http_request.data)
                     request = Json.loads(request_json)
+                    request["id"] = user.id
 
                     response = await self.process_request(request)
                     response_json = Json.dumps(response[1])

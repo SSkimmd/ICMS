@@ -5,6 +5,9 @@ class Extension(object):
         self.server: StreamServer = server
         self.functions: map = {}     
 
+    def read_callback(self, callback):
+        pass
+
     def register_function(self, function):
         self.functions[function.__name__] = function
 

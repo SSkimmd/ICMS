@@ -21,8 +21,13 @@ class App:
             for extension in json["extensions"]:
                 name = list(extension.keys())[0]
 
-                if not "lib" in extension[name] or not "enabled" in extension[name]: break
-                if not extension[name]["enabled"]: break
+                if "lib" not in extension[name] or "enabled" not in extension[name]: 
+                    print("ERROR: Extension Multiple Key Error")
+                    continue
+                
+                if not extension[name]["enabled"]:
+                    print(f'Skipping Extension: {name}')
+                    continue
 
                 lib = extension[name]["lib"]
 
