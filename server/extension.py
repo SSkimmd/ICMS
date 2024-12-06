@@ -1,9 +1,10 @@
 from stream import Server as StreamServer
+import inspect
 
 class Extension(object):
     def __init__(self, server):
         self.server: StreamServer = server
-        self.functions: map = {}     
+        self.functions: map = {}
 
     def read_callback(self, callback):
         pass

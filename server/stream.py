@@ -75,8 +75,8 @@ class Server:
             if device_name not in self.users:
                 return(400, "ERROR: Device Not Found")
 
-            response[device_name] = {}
-            response[device_name]["functions"] = []
+            response[device] = {}
+            response[device]["functions"] = []
 
         if response:
             return (200, response)
@@ -87,8 +87,26 @@ class Server:
         if request is not None:
             if "type" not in request: return 'ERROR: Key Error (type)'
 
+            #create a callback
+            #when server function is called, also call all functions assigned to that trigger 
+            #enables two way communication through basic event system
+            #args 1:
+            #(device callback): [string]      - function to be called on the device when trigger function is called
+            #(server trigger):  [string]      - function which calls device function when called
+            #args 2:
+            #(server input callback):         - function to be called when data is recieved from the output device
+            if request["type"] == "CALLBACK":
+                pass
             #=================================== CONNECT ========================================================
+            #args:
+            #(device-name): [string]              - the name of the connected device
+            #(device-type): [input][output][both] - the type of the connected device
+            #
+            #[input]  - only recieve data from the server to device
+            #[output] - only recieve data from device to server, no specific packet structure required
+            #[both]   - allow two way callbacks between device and server
             if request["type"] == "CONNECT":
+                print(self.users)
                 if "device-name" not in request and "id" not in request: 
                     return (400, "ERROR: Multiple Key Errors")
                 
@@ -156,7 +174,8 @@ class Server:
             if not data:
                 #remove user once they stop sending and recieving data
                 #this needs to only delete the current connection not user though eventually
-                del self.users[user.id]
+                if self.users[user.id].user is None:
+                    del self.users[user.id]
                 break
 
             try:
@@ -178,7 +197,6 @@ class Server:
                 except:
                     continue
             else:
-                print(http_request.data)
                 try:
                     request_json = ''.join(http_request.data)
                     request = Json.loads(request_json)

@@ -20,6 +20,20 @@ server_thread.start()
 start_time = time.time()
 
 
+def start_server():
+    global server
+    global server_thread  
+    global start_time  
+
+    server.stream_server.close()
+    server = Server()
+    server.init_extensions()
+
+    server_thread = Thread(target=server.start, daemon=True)
+    server_thread.start()
+
+    start_time = time.time()
+
 @app.route("/server-info")
 def info():
     global server
@@ -37,36 +51,13 @@ def info():
 
 @app.route("/restart")
 def restart():
-    global server
-    global server_thread
-    global start_time
-
-    server.stream_server.close()
-    server = Server()
-    server.init_extensions()
-
-    server_thread = Thread(target=server.start, daemon=True)
-    server_thread.start()
-
-    start_time = time.time()
+    start_server()
     return Response("Restarting...", 200)
 
 
 @app.route("/start")
 def start():
-    global server
-    global server_thread
-    global start_time
-
-    server.stream_server.close()
-    server = Server()
-    server.init_extensions()
-
-    server_thread = Thread(target=server.start, daemon=True)
-    server_thread.start()
-
-    start_time = time.time()
-
+    start_server()
     return Response("Starting...", 200)
 
 
