@@ -13,11 +13,11 @@
         <p class="text-6xl pb-8">Extensions</p>
         <div class="grid grid-flow-row grid-cols-3 gap-2 grid-rows-2">
             {#each Object.keys(data) as module}
-                <div class="w-auto h-40 border-2 border-blue-500">
+                <a href={"/extensions/" + module} class="w-auto h-40 border-2 border-blue-500">
                     <p class="w-full h-full pt-12 text-center">
                         {module}
                     </p>
-                </div>
+                </a>
             {/each}
         </div>
     {:else}

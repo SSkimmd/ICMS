@@ -1,12 +1,9 @@
 import asyncio
 
-class User:
-    def __init__(self, username: str):
-        self.username = username
-
 class Connection:
-    def __init__(self, id: int, writer: asyncio.StreamWriter, reader: asyncio.StreamReader):
+    def __init__(self, id: int, writer: asyncio.StreamWriter, reader: asyncio.StreamReader, device_name = None, device_type = None):
         self.id = id
         self.writer: asyncio.StreamWriter = writer
         self.reader: asyncio.StreamReader = reader
-        self.user: User = None
+        self.device_name = device_name
+        self.device_type = device_type

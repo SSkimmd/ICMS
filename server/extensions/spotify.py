@@ -10,7 +10,9 @@ class Spotify(Extension):
         super().__init__(server)
         
         self.volume = 0
-        self.register_function(self.change_volume)
+        self.register_function(self.change_volume, {
+            "volume": "int"
+        })
         
     async def change_volume(self, volume):
         self.volume = volume

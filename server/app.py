@@ -2,8 +2,8 @@ import json as Json
 import importlib
 import asyncio
 import threading
+import sys
 from stream import Server as StreamServer
-from user import User
 
 
 class App:
@@ -32,7 +32,10 @@ class App:
                 lib = extension[name]["lib"]
 
                 try:
-                    new_module = importlib.import_module(lib)  
+                    if sys.modules.get(lib):
+                        sys.modules.pop(lib)
+                        print(f'Reimporting: {name}')
+                    new_module = importlib.import_module(lib) 
                     new_extension = new_module.initialise(self.stream_server)
                     self.extensions[name] = new_extension
                     print(f'Started Extension: {name}')

@@ -1,4 +1,4 @@
-export const load = async () => {
+export const load = async ({ params }) => {
     try {
         var response = await fetch("http://0.0.0.0:8081/server-info", {
             signal: AbortSignal.timeout(3000),
@@ -8,8 +8,9 @@ export const load = async () => {
         const server_info = await response.json();
         if(!server_info["server_running"]) { return; }
 
+        let extension_name = params["extension"];
 
-        var devices = await fetch("http://0.0.0.0:8080/", {
+        var response = await fetch("http://0.0.0.0:8080/", {
             signal: AbortSignal.timeout(3000),
             method: 'POST',
             headers: {
@@ -17,13 +18,15 @@ export const load = async () => {
             },
             body: JSON.stringify({
                 "type": "GET",
-                "device": "all"
+                "module": "all"
             })
         });
-        const data = await devices.json();
-
-        return { ...data }
-    } catch {
-        return { }
+        const data = await response.json();
+        return { ...data[extension_name] }
+    } catch { 
+        return {}
     }
 }
+
+
+//                    <input placeholder="Enter String..." class="text-xl h-8 w-48 bg-inherit"/>

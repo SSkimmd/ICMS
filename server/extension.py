@@ -9,8 +9,14 @@ class Extension(object):
     def read_callback(self, callback):
         pass
 
-    def register_function(self, function):
-        self.functions[function.__name__] = function
+    def register_function(self, function, args = None):
+        self.functions[function.__name__] = { }
+        self.functions[function.__name__]["function"] = function
+
+        if args is not None:
+            self.functions[function.__name__]["arguments"] = args
+        else:
+            self.functions[function.__name__]["arguments"] = { }
 
     def unregister_function(self, name: str):
         self.functions.pop(name, None)

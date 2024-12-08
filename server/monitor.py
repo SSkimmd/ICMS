@@ -10,6 +10,7 @@ from flask import Flask
 from flask import Response
 
 import json as JSON
+import sys
 
 app = Flask(__name__)
 server = Server()
@@ -25,10 +26,15 @@ def start_server():
     global server_thread  
     global start_time  
 
+    #for extension in server.extensions:
+
     server.stream_server.close()
+
+    server = None
+    server_thread = None
+
     server = Server()
     server.init_extensions()
-
     server_thread = Thread(target=server.start, daemon=True)
     server_thread.start()
 
@@ -53,7 +59,6 @@ def info():
 def restart():
     start_server()
     return Response("Restarting...", 200)
-
 
 @app.route("/start")
 def start():

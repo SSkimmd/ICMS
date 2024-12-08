@@ -10,9 +10,9 @@
 
 <div class="pl-60 pr-20 pt-20 min-h-screen flex flex-col border-red-400">
     {#if Object.keys(data).length > 0}
-        <p class="text-6xl pb-8">Extensions</p>
+        <p class="text-6xl pb-8">Devices</p>
         <div class="grid grid-flow-row grid-cols-3 gap-2 grid-rows-2">
-            {#each Object.keys(data) as device}
+            {#each Object.keys(data["devices"]) as device}
                 <div class="w-auto h-40 border-2 border-blue-500">
                     <p class="w-full h-full pt-12 text-center">
                         {device}

@@ -44,7 +44,11 @@ class Server:
                 functions = self.extensions[extension].get_functions()
 
                 for func in functions:
-                    response[extension]["functions"].append(func)
+                    arguments = self.extensions[extension].functions[func]["arguments"]
+                    response[extension]["functions"].append({
+                        "function": func,
+                        "arguments": arguments
+                    })
         else:
             if extension_name not in self.extensions: 
                 return (400, 'ERROR: Module Not Found')
@@ -66,17 +70,13 @@ class Server:
 
     async def get_devices(self, device_name):
         response = {}
-
         if device_name == "all":
-            for device in self.users:
-                response[device] = {}
-                response[device]["functions"] = []
+            response["devices"] = {}
+            for user in self.users:
+                response["devices"][self.users[user].device_name] = { "device_type": self.users[user].device_type }       
         else:
             if device_name not in self.users:
                 return(400, "ERROR: Device Not Found")
-
-            response[device] = {}
-            response[device]["functions"] = []
 
         if response:
             return (200, response)
@@ -106,17 +106,21 @@ class Server:
             #[output] - only recieve data from device to server, no specific packet structure required
             #[both]   - allow two way callbacks between device and server
             if request["type"] == "CONNECT":
-                print(self.users)
-                if "device-name" not in request and "id" not in request: 
+                if "device-name" not in request and "id" not in request and "device-type" not in request: 
                     return (400, "ERROR: Multiple Key Errors")
-                
+
+
                 id = request["id"]
                 if id not in self.users:
                     return (400, "ERROR: User ID Mismatch")
 
-                username = request["device-name"]
-                self.users[id].user = User(username)
-                return (200, f'SUCCESS: Connected With Device Name - {username}')
+
+                device_name = request["device-name"]
+                device_type = request["device-type"]
+                self.users[id].device_name = device_name
+                self.users[id].device_type = device_type
+
+                return (200, f'SUCCESS: Connected With Device Name - {device_name}')
 
             #==================================== GET =======================================================           
             if request["type"] == "GET":
@@ -150,7 +154,7 @@ class Server:
                     return (400, f'ERROR: Argument Error: Expected {expected_length} - Found {arguments_length}')
 
                 try:
-                    response = await self.extensions[extension_name].functions[function_name](**arguments)
+                    response = await self.extensions[extension_name].functions[function_name]["function"](**arguments)
                 except:
                     return (400, f'ERROR: Argument Name Error')
                 
@@ -165,16 +169,14 @@ class Server:
         print('Connection From {}'.format(peername))
 
         #log user
-        user = Connection(len(self.users), writer, reader)
-        self.users[user.id] = user
+        user = None
 
         while self.running:
             data = await reader.read(4096)
             
             if not data:
-                #remove user once they stop sending and recieving data
-                #this needs to only delete the current connection not user though eventually
-                if self.users[user.id].user is None:
+                if user is not None:
+                    print(f'Device Disconnected: {self.users[user.id]}')
                     del self.users[user.id]
                 break
 
@@ -183,24 +185,30 @@ class Server:
             except:
                 http_request = None
 
+                # only allow socket devices to use connect packet type
+                # create user
+                user = Connection(len(self.users), writer, reader)
+                self.users[user.id] = user
 
-            #tunnel request somewhere
-            #find module requested
-            #call function requested with arguments
-            #allow user to retrieve all functions or specific module functions
+
+
+            #f request is not a HTTP request
             if http_request is None:
                 try:
                     request = Json.loads(data.decode())
+                    request["id"] = user.id
+
                     response = await self.process_request(request)
                     string = Json.dumps(response)
+                    
                     writer.write(string.encode())
                 except:
                     continue
+            #If request is a HTTP request
             else:
                 try:
                     request_json = ''.join(http_request.data)
                     request = Json.loads(request_json)
-                    request["id"] = user.id
 
                     response = await self.process_request(request)
                     response_json = Json.dumps(response[1])
