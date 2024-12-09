@@ -1,6 +1,17 @@
 from extension import Extension
 from threading import Thread
+import asyncio
 import time
+import json as Json
+
+
+class Connection:
+    def __init__(self, id: int, writer: asyncio.StreamWriter, reader: asyncio.StreamReader, device_name = None, device_type = None):
+        self.id = id
+        self.writer: asyncio.StreamWriter = writer
+        self.reader: asyncio.StreamReader = reader
+        self.device_name = device_name
+        self.device_type = device_type
 
 class LEDS(Extension):
     def __init__(self, server):
@@ -8,21 +19,46 @@ class LEDS(Extension):
         
         self.colour = 0
         self.pattern = ""
+        self.devices: dict[str, Connection] = { }
         
         self.register_function(self.change_colour, {
-            "colour": "int"
+            "device_name": "str",
+            "r": "int",
+            "g": "int",
+            "b": "int"
         })
         self.register_function(self.change_pattern, {
             "pattern": "str"
         })
+        self.register_function(self.connect, {
+            "device_name": "str"
+        })
 
-    async def change_colour(self, colour):
-        self.colour = colour
-        return self.colour
+    async def change_colour(self, device_name, r, g, b):
+        if device_name not in self.devices:
+            return "ERROR: Device Does Not Exist"
+
+        response = {
+            "type": "POST",
+            "function": "solid_colour",
+            "arguments": {
+                "r": r,
+                "g": g,
+                "b": b
+            }
+        }
+        
+        self.devices[device_name].writer.write(Json.dumps(response).encode())
+        self.devices[device_name].writer.drain()
+        return "SUCCESS: Set Colour"
     
     async def change_pattern(self, pattern):
         self.pattern = pattern
         return self.pattern
+    
+    # connect led controller
+    async def connect(self, device_name):
+        self.devices[device_name] = await self.server.get_user(name=device_name)
 
 def initialise(server):
     leds = LEDS(server)

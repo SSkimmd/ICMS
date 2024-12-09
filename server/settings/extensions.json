@@ -9,5 +9,10 @@
             "enabled": true,
             "lib": "extensions.leds"
         }
+    }, {
+        "test": {
+            "enabled": true,
+            "lib": "extensions.test"
+        }
     }]
 }

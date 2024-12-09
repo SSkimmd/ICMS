@@ -7,8 +7,6 @@ class Endpoint:
         self.name = name
         self.callback = callback
         
-
-
 class Network:
     def __init__(self, host, port, pool):
         self.host = host

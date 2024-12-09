@@ -8,7 +8,8 @@ export const load = async ({ params }) => {
         const server_info = await response.json();
         if(!server_info["server_running"]) { return; }
 
-        let extension_name = params["extension"];
+        let device_name = params["device"];
+        device_name = device_name.replace("%20", " ");
 
         var response = await fetch("http://0.0.0.0:8080/", {
             signal: AbortSignal.timeout(3000),
@@ -18,12 +19,12 @@ export const load = async ({ params }) => {
             },
             body: JSON.stringify({
                 "type": "GET",
-                "module": "all"
+                "device": "all"
             })
         });
         const data = await response.json();
-        data[extension_name]["extension"] = extension_name;
-        return { ...data[extension_name] }
+        data["devices"][device_name]["device"] = device_name;
+        return { ...data["devices"][device_name] }
     } catch { 
         return {}
     }

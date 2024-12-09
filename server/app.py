@@ -46,7 +46,11 @@ class App:
 
     def start(self):
         self.stream_server.extensions = self.extensions
-        asyncio.run(self.stream_server.start())
+
+        try:
+            asyncio.run(self.stream_server.start())
+        except:
+            print("weird?")
 
 if __name__ == "__main__":
     app = App()

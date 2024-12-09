@@ -12,7 +12,7 @@ from user import *
 # extensions can then use this to subscribe their own callbacks
 
 class Server:
-    def __init__(self, extensions: map = {}, users: dict[str, Connection] = {}):
+    def __init__(self, extensions: map = { }, users: dict[str, Connection] = { }):
         self.users: dict[int, Connection] = users
         self.extensions: map = extensions
         self.running = False
@@ -33,6 +33,15 @@ class Server:
             except CancelledError:
                 print("Server Closed")
 
+    async def get_user(self, id = None, name = None):
+        if id is not None:
+            return self.users[id]
+        if name is not None:
+            for user in self.users:
+                if self.users[user].device_name == name:
+                    return self.users[user]             
+        return None
+        
     async def get_extensions(self, extension_name):
         response = {}
 
@@ -69,14 +78,17 @@ class Server:
             return (400, response)
 
     async def get_devices(self, device_name):
-        response = {}
+        response = { }
         if device_name == "all":
-            response["devices"] = {}
+            response["devices"] = { }
             for user in self.users:
                 response["devices"][self.users[user].device_name] = { "device_type": self.users[user].device_type }       
         else:
             if device_name not in self.users:
                 return(400, "ERROR: Device Not Found")
+            
+            response["devices"] = { }
+            response["devices"][device_name] = { "device_type": self.users[device_name].device_type }
 
         if response:
             return (200, response)
@@ -155,6 +167,8 @@ class Server:
 
                 try:
                     response = await self.extensions[extension_name].functions[function_name]["function"](**arguments)
+
+                    #also call all callbacks
                 except:
                     return (400, f'ERROR: Argument Name Error')
                 

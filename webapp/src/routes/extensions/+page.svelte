@@ -13,8 +13,8 @@
         <p class="text-6xl pb-8">Extensions</p>
         <div class="grid grid-flow-row grid-cols-3 gap-2 grid-rows-2">
             {#each Object.keys(data) as module}
-                <a href={"/extensions/" + module} class="w-auto h-40 border-2 border-blue-500">
-                    <p class="w-full h-full pt-12 text-center">
+                <a href={"/extensions/" + module} class="w-auto h-40 bg-gray-800 rounded-xl shadow-xl">
+                    <p class="w-full h-full pt-14 text-2xl text-center">
                         {module}
                     </p>
                 </a>

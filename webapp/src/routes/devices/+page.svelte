@@ -13,16 +13,16 @@
         <p class="text-6xl pb-8">Devices</p>
         <div class="grid grid-flow-row grid-cols-3 gap-2 grid-rows-2">
             {#each Object.keys(data["devices"]) as device}
-                <div class="w-auto h-40 border-2 border-blue-500">
-                    <p class="w-full h-full pt-12 text-center">
+                <a href={"/devices/" + device} class="w-auto h-40 bg-gray-800 rounded-xl shadow-xl">
+                    <p class="w-full h-full pt-14 text-2xl text-center">
                         {device}
                     </p>
-                </div>
+                </a>
             {/each}
         </div>
     {:else}
-        <p class="text-center text-4xl">Server Is Down</p>
-        <p class="text-center text-lg">Restart It From The Dashboard To See Active Extensions</p>
+        <p class="text-center text-4xl">No Devices Connected</p>
+        <p class="text-center text-lg">Connected Devices Will Be Displayed Here</p>
     {/if}    
 </div>
 

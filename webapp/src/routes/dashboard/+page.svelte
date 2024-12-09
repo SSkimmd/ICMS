@@ -24,17 +24,17 @@
         {/if}
     </div>
 
-    <div class="text-lg flex">
+    <div class="text-lg flex pt-2">
         <form method="POST">
-            <button class="pr-2" formaction="?/start">Start</button>
+            <button class="btn bg-green-600 hover:bg-green-700 text-green-100" formaction="?/start">Start</button>
         </form>
 
         <form method="POST">
-            <button formaction="?/stop">Stop</button>
+            <button class="btn bg-red-500 hover:bg-red-600 text-red-100" formaction="?/stop">Stop</button>
         </form>
 
         <form method="POST">
-            <button class="pl-2" formaction="?/restart">Restart</button>
+            <button class="btn bg-amber-400 hover:bg-amber-500 text-amber-800" formaction="?/restart">Restart</button>
         </form>
     </div>
 </div>
