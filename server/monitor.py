@@ -9,7 +9,7 @@ import time
 from flask import Flask
 from flask import Response
 
-import json as JSON
+import json as Json
 import sys
 
 app = Flask(__name__)
@@ -40,6 +40,28 @@ def start_server():
 
     start_time = time.time()
 
+
+@app.route("/extensions")
+def get_extension_config():
+    global server
+
+    extensions: dict[str, dict] = { }
+    with open("settings/extensions.json") as file:
+        json = Json.loads(file.read())
+        for extension in json["extensions"]:
+            name = list(extension.keys())[0]
+            extensions[name] = {
+                "enabled": extension[name]["enabled"],
+                "lib": extension[name]["lib"] 
+            }
+        
+    return Response(
+    response=Json.dumps({
+        "extensions": extensions
+    }), 
+    status=200, 
+    mimetype='application/json')    
+
 @app.route("/server-info")
 def info():
     global server
@@ -48,7 +70,7 @@ def info():
     uptime = time.time() - start_time
 
     return Response(
-    response=JSON.dumps({
+    response=Json.dumps({
         "server_running": server.stream_server.running,
         "server_uptime": round(uptime, 2)
     }), 

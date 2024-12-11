@@ -17,27 +17,39 @@ export const load = async () => {
 
 export const actions = {
     start: async(event) => {
-        await fetch("http://0.0.0.0:8081/start", {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });      
+        try {
+            await fetch("http://0.0.0.0:8081/start", {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }); 
+        } catch {
+
+        }
     },
     stop: async(event) => {
-        await fetch("http://0.0.0.0:8081/stop", {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }); 
+        try {
+            await fetch("http://0.0.0.0:8081/stop", {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch {
+
+        }
     },
     restart: async(event) => {
-        await fetch("http://0.0.0.0:8081/restart", {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }); 
+        try {
+            await fetch("http://0.0.0.0:8081/restart", {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }); 
+        } catch {
+
+        }
     }
 }

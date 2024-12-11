@@ -9,19 +9,12 @@ export const load = async () => {
         if(!server_info["server_running"]) { return; }
 
 
-        var response = await fetch("http://0.0.0.0:8080/", {
+        var response = await fetch("http://0.0.0.0:8081/extensions", {
             signal: AbortSignal.timeout(3000),
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                "type": "GET",
-                "module": "all"
-            })
+            method: 'GET'
         });
         const data = await response.json();
-        return { ...data }
+        return { ...data["extensions"] }
     } catch { 
         return {}
     }

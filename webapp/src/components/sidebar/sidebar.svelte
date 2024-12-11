@@ -11,8 +11,8 @@
     }
 </script>
 
-<div class="flex flex-col items-center w-40 h-screen overflow-hidden fixed text-gray-400 bg-gray-900 rounded">
-    <a class="flex items-center w-full px-3 mt-3" href="">
+<div class="flex-col items-center w-40 h-screen overflow-hidden fixed hidden sm:flex sm:visible invisible text-gray-400 bg-gray-900 rounded">
+    <a class="flex items-center w-full px-3 mt-3" href="/">
         <span class="ml-2 text-sm font-bold">The App</span>
     </a>
     <div class="w-full px-2">

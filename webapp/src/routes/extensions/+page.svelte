@@ -1,5 +1,7 @@
 <script>
     import Sidebar from "../../components/sidebar/sidebar.svelte";
+    //import { selected } from "../../lib/sidebar";
+
     export let data;
 </script>
 
@@ -8,21 +10,31 @@
     <Sidebar/>
 </body>
 
-<div class="pl-60 pr-20 pt-20 min-h-screen flex flex-col border-red-400">
+<div class="sm:pl-60 pr-20 pt-20 min-h-screen flex flex-col border-red-400">
     {#if Object.keys(data).length > 0}
-        <p class="text-6xl pb-8">Extensions</p>
-        <div class="grid grid-flow-row grid-cols-3 gap-2 grid-rows-2">
-            {#each Object.keys(data) as module}
-                <a href={"/extensions/" + module} class="w-auto h-40 bg-gray-800 rounded-xl shadow-xl">
-                    <p class="w-full h-full pt-14 text-2xl text-center">
-                        {module}
-                    </p>
-                </a>
+        <p class="text-6xl sm:pl-2 pl-12">Extensions</p>
+        <div class="grid grid-flow-row sm:grid-cols-1 2xl:grid-cols-3 xl:grid-cols-2 md:grid-cols-1">
+            {#each Object.keys(data) as extension}
+                <div class="pt-10">
+                    <div class="card bg-base-100 w-96 shadow-2xl">
+                        <div class="card-body">
+                        <h2 class="card-title">{extension}</h2>
+                        <div class="card-actions justify-end">
+                            {#if data[extension]["enabled"]}
+                                <button class="btn bg-red-500 hover:bg-red-600 text-red-100">Disable</button>
+                            {:else}
+                                <button class="btn bg-green-600 hover:bg-green-700 text-green-100">Enable</button>
+                            {/if}
+                            <a href={"/extensions/" + extension} class="btn bg-slate-400 hover:bg-slate-500 text-slate-700">View API</a>
+                        </div>
+                        </div>
+                    </div>
+                </div>
             {/each}
         </div>
     {:else}
-        <p class="text-center text-4xl">Server Is Down</p>
-        <p class="text-center text-lg">Restart It From The Dashboard To See Active Extensions</p>
+        <p class="text-center text-4xl">No Extensions</p>
+        <p class="text-center text-lg">Enable Extensions From The Config File</p>
     {/if}
 </div>
 
