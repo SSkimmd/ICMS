@@ -98,7 +98,6 @@ class Server:
     async def process_request(self, request):
         if request is not None:
             if "type" not in request: return 'ERROR: Key Error (type)'
-
             #create a callback
             #when server function is called, also call all functions assigned to that trigger 
             #enables two way communication through basic event system
@@ -148,34 +147,57 @@ class Server:
             #==================================== POST =======================================================
             if request["type"] == "POST":
                 if "module" not in request and "function" not in request and "arguments" not in request: 
+                    print('ERROR: Multiple Key Errors')
                     return (400, 'ERROR: Multiple Key Errors')
 
                 extension_name = request["module"]
                 if extension_name not in self.extensions: 
+                    print('ERROR: Key Error (module)')
                     return (400, 'ERROR: Key Error (module)')
 
                 function_name = request["function"]
                 if function_name not in self.extensions[extension_name].functions: 
+                    print('ERROR: Key Error (function)')
                     return (400, 'ERROR: Key Error (function)')
 
                 arguments = request["arguments"]
                 arguments_length = len(arguments)
-                expected_length = self.extensions[extension_name].functions[function_name].__code__.co_argcount - 1
+                expected_length = self.extensions[extension_name].functions[function_name]['function'].__code__.co_argcount - 1
+
+                print(arguments)
 
                 if arguments_length != expected_length: 
                     return (400, f'ERROR: Argument Error: Expected {expected_length} - Found {arguments_length}')
 
                 try:
-                    response = await self.extensions[extension_name].functions[function_name]["function"](**arguments)
+                    #check argument types
+                    if(self.extensions[extension_name].functions[function_name]["arguments"]):
+                        args = self.extensions[extension_name].functions[function_name]["arguments"]
+                        for argument in arguments:
+                            try:
+                                if args[argument] == 'int':
+                                    arguments[argument] = int(arguments[argument])
+                                if args[argument] == 'bool':
+                                    arguments[argument] = bool(arguments[argument])
+                                if args[argument] == 'str':
+                                    arguments[argument] = str(arguments[argument])
+                            except:
+                                return(400, f'ERROR: Argument Error: {argument} Has Incorrect Type')
 
+
+                    response = await self.extensions[extension_name].functions[function_name]["function"](**arguments)
                     #also call all callbacks
                 except:
+                    print('ERROR: Argument Name Error')
                     return (400, f'ERROR: Argument Name Error')
-                
+
+                if response[0:5] == "ERROR":
+                    return (400, response)
+
                 if response is not None:
-                    return(200, response)
+                    return (200, response)
                 else:
-                    return(400, response)
+                    return (400, response)
         return None
 
     async def update(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):

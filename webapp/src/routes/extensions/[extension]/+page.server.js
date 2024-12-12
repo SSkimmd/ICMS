@@ -28,6 +28,3 @@ export const load = async ({ params }) => {
         return {}
     }
 }
-
-
-//                    <input placeholder="Enter String..." class="text-xl h-8 w-48 bg-inherit"/>

@@ -50,7 +50,7 @@ class App:
         try:
             asyncio.run(self.stream_server.start())
         except:
-            print("weird?")
+            pass
 
 if __name__ == "__main__":
     app = App()

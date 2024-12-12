@@ -14,7 +14,7 @@ class Spotify(Extension):
             "volume": "int"
         })
         
-    async def change_volume(self, volume):
+    async def change_volume(self, volume: int):
         self.volume = volume
         return self.volume
 

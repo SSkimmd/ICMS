@@ -1,18 +1,24 @@
-from app import App as Server
-from threading import Thread
-
 import logging
-log = logging.getLogger('werkzeug')
-log.setLevel(logging.ERROR)
-
 import time
-from flask import Flask
-from flask import Response
-
 import json as Json
 import sys
 
+from app import App as Server
+from threading import Thread
+from flask import Flask, request
+from flask import Response
+from user import User
+from flask_cors import CORS
+
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
+
 app = Flask(__name__)
+CORS(app, resources={
+    "/*": {
+        "origins": "*"
+    }
+})
 server = Server()
 server.init_extensions()
 
@@ -39,6 +45,41 @@ def start_server():
     server_thread.start()
 
     start_time = time.time()
+
+
+@app.route("/login")
+def user_login():
+    pass
+
+
+@app.route("/register", methods=["POST"])
+def user_register():
+    data = request.get_json()
+
+    if 'username' not in data:
+        return(400, 'ERROR: Key Error (username)')
+    
+    if 'password' not in data:
+        return(400, 'ERROR: Key Error (password)')
+
+    username = data["username"]
+    user = User(username)
+
+
+    return(200, f'SUCCESS: Registered {username}')
+
+
+
+@app.route("/extensions/call", methods=["POST"])
+async def call_function():
+    data = request.get_json()
+    response = await server.stream_server.process_request(data)
+
+    status_code = response[0]
+    response_data = response[1]
+
+    return Response(status=status_code, response=Json.dumps(response_data))
+
 
 
 @app.route("/extensions")

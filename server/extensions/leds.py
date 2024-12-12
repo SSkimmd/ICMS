@@ -34,7 +34,7 @@ class LEDS(Extension):
             "device_name": "str"
         })
 
-    async def change_colour(self, device_name, r, g, b):
+    async def change_colour(self, device_name: str, r: int, g: int, b: int):
         if device_name not in self.devices:
             return "ERROR: Device Does Not Exist"
 
