@@ -1,9 +1,14 @@
 import asyncio
 from asyncio import CancelledError
 import json as Json
+import re
 import parsers as parsers
 import sys
+import logging
+
+
 from user import *
+from pydoc import locate
 
 
 # event system
@@ -11,12 +16,38 @@ from user import *
 # ex. OnRecieved() will call all subscriptions when data is recieved
 # extensions can then use this to subscribe their own callbacks
 
+class NoColourFormatter(logging.Formatter):
+    """Log formatter that strips terminal colour escape codes from the log message."""
+    ANSI_RE = re.compile(r"\x1b\[[0-9;]*m")
+
+    def format(self, record):
+        """Return logger message with terminal escapes removed."""
+        return "[%s] [%s]: %s" % (
+            record.levelname,
+            record.name,
+            re.sub(self.ANSI_RE, "", record.msg % record.args)
+        )
+
+
+
 class Server:
     def __init__(self, extensions: map = { }, users: dict[str, Connection] = { }):
         self.users: dict[int, Connection] = users
         self.extensions: map = extensions
         self.running = False
         self.server = None
+
+
+        self.logger = logging.getLogger("werkzeug")
+        self.logger.setLevel(logging.INFO)
+
+
+        logformatter = NoColourFormatter()
+        loghandler = logging.FileHandler("log.txt", mode="a", encoding="utf8")
+        streamhandler = logging.StreamHandler(sys.stdout)
+        loghandler.setFormatter(logformatter)
+        self.logger.addHandler(loghandler)
+        self.logger.addHandler(streamhandler)
 
     def close(self):
         self.running = False
@@ -28,14 +59,15 @@ class Server:
 
         async with self.server:
             try:
-                print('Stream Server Started...')
+                self.logger.info('Stream Server Started.')
                 await self.server.serve_forever()
             except CancelledError:
-                print("Server Closed")
+                self.logger.info('Stream Server Closed.')
 
     async def get_user(self, id = None, name = None):
         if id is not None:
-            return self.users[id]
+            if self.users[id] is not None:
+                return self.users[id]
         if name is not None:
             for user in self.users:
                 if self.users[user].device_name == name:
@@ -131,6 +163,7 @@ class Server:
                 self.users[id].device_name = device_name
                 self.users[id].device_type = device_type
 
+                self.logger.info(f'SUCCESS: Connected With Device Name - {device_name}')
                 return (200, f'SUCCESS: Connected With Device Name - {device_name}')
 
             #==================================== GET =======================================================           
@@ -139,32 +172,29 @@ class Server:
 
                 if "module" in request:
                     response = await self.get_extensions(request["module"])
+
                     return response
                 if "device" in request:
                     response = await self.get_devices(request["device"])
+
                     return response
                 
             #==================================== POST =======================================================
             if request["type"] == "POST":
                 if "module" not in request and "function" not in request and "arguments" not in request: 
-                    print('ERROR: Multiple Key Errors')
                     return (400, 'ERROR: Multiple Key Errors')
 
                 extension_name = request["module"]
                 if extension_name not in self.extensions: 
-                    print('ERROR: Key Error (module)')
                     return (400, 'ERROR: Key Error (module)')
 
                 function_name = request["function"]
                 if function_name not in self.extensions[extension_name].functions: 
-                    print('ERROR: Key Error (function)')
                     return (400, 'ERROR: Key Error (function)')
 
                 arguments = request["arguments"]
                 arguments_length = len(arguments)
                 expected_length = self.extensions[extension_name].functions[function_name]['function'].__code__.co_argcount - 1
-
-                print(arguments)
 
                 if arguments_length != expected_length: 
                     return (400, f'ERROR: Argument Error: Expected {expected_length} - Found {arguments_length}')
@@ -175,34 +205,28 @@ class Server:
                         args = self.extensions[extension_name].functions[function_name]["arguments"]
                         for argument in arguments:
                             try:
-                                if args[argument] == 'int':
-                                    arguments[argument] = int(arguments[argument])
-                                if args[argument] == 'bool':
-                                    arguments[argument] = bool(arguments[argument])
-                                if args[argument] == 'str':
-                                    arguments[argument] = str(arguments[argument])
+                                arg_type = locate(args[argument])
+                                arguments[argument] = arg_type(arguments[argument])
                             except:
                                 return(400, f'ERROR: Argument Error: {argument} Has Incorrect Type')
 
 
                     response = await self.extensions[extension_name].functions[function_name]["function"](**arguments)
+
+                    if response:
+                        if type(response) == str:
+                            if response[0:5] == "ERROR":
+                                return(400, response)
+                        return(200, response)
                     #also call all callbacks
                 except:
-                    print('ERROR: Argument Name Error')
                     return (400, f'ERROR: Argument Name Error')
-
-                if response[0:5] == "ERROR":
-                    return (400, response)
-
-                if response is not None:
-                    return (200, response)
-                else:
-                    return (400, response)
+                return (400, response)
         return None
 
     async def update(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
         peername = writer.get_extra_info('peername')
-        print('Connection From {}'.format(peername))
+        self.logger.info('Connection From {}'.format(peername))
 
         #log user
         user = None
@@ -212,7 +236,7 @@ class Server:
             
             if not data:
                 if user is not None:
-                    print(f'Device Disconnected: {self.users[user.id]}')
+                    self.logger.info(f'Device Disconnected: {self.users[user.id]}')
                     del self.users[user.id]
                 break
 

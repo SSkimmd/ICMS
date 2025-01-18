@@ -1,19 +1,31 @@
 <script>
     import Sidebar from "../../../components/sidebar/sidebar.svelte";
     let isModalOpen = false;
-    let currentFunction;
+    let CurrentFunction;
     let requestResult = "";
 
+    let CurrentFunctionArguments = { }
+    let JsonCurrentFunctionArguments = { }
+
     function SetCurrentFunction(func) {
-        currentFunction = func;
+        CurrentFunction = func;
+        CurrentFunctionArguments = { }
+
+        const args = Object.keys(CurrentFunction["arguments"]);
+        for(var key in args) {
+            CurrentFunctionArguments[args[key]] = "";
+        }
+
+        JsonCurrentFunctionArguments = JSON.stringify(CurrentFunctionArguments, null, "\t");
     }
 
-    let APIRequestArguments = {}
     async function SendAPIRequest() {
-        if(currentFunction == null) return;
+        if(CurrentFunction == null) return;
         if(data == null) return;
 
-        await fetch("http://192.168.1.168:8081/extensions/call", {
+        CurrentFunctionArguments = JsonCurrentFunctionArguments.replace(/\s+/g, "");
+        
+        const response = await fetch("/api/extensions", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -21,16 +33,13 @@
             body: JSON.stringify({
                 "type": "POST",
                 "module": data["extension"],
-                "function": currentFunction["function"],
-                "arguments": APIRequestArguments
+                "function": CurrentFunction["function"],
+                "arguments": JSON.parse(CurrentFunctionArguments)
             })
-        }).then(async (response) => {
-            let json = await response.json();
-            requestResult = {
-                "status": response.status,
-                "response": json
-            }
-        });
+        })
+
+        const jsonResponse = await response.json();
+        requestResult = jsonResponse;
     }
 
     export let data;
@@ -39,18 +48,15 @@
 
 <div class="modal" class:modal-open={isModalOpen}>
     <div class="modal-box">
-        {#if currentFunction != null}
-        <h3 class="font-bold text-2xl pb-4">{currentFunction["function"]}</h3>
+        {#if CurrentFunction != null}
+        <h3 class="font-bold text-2xl pb-4">{CurrentFunction["function"]}</h3>
         <div>
-            {#each Object.keys(currentFunction["arguments"]) as argument}
-                <div class="pt-2">
-                    <p class="pb-2">{argument}</p>
-                    <input bind:value={APIRequestArguments[argument]} name={argument} class="input outline outline-2 outline-slate-800" placeholder="Enter Value..."/>
-                </div>
-            {/each}
+            <textarea class="textarea textarea-bordered w-full h-96 text-lg" bind:value={JsonCurrentFunctionArguments}></textarea>
         </div>
         <div class="modal-action">
-            <button class="btn bg-red-500 hover:bg-red-500 text-red-100" on:click={() => {isModalOpen = false; APIRequestArguments = {}; requestResult = ""}}>Cancel</button>
+            <button class="btn bg-red-500 hover:bg-red-500 text-red-100" on:click={() => {
+                isModalOpen = false; JsonCurrentFunctionArguments = ""; requestResult = ""
+            }}>Cancel</button>
             <button class="btn bg-green-600 hover:bg-green-700 text-green-100" on:click={() => SendAPIRequest()}>Send</button>
         </div>
         {#if requestResult != ""}
@@ -70,17 +76,20 @@
     <div class="grid grid-flow-row sm:grid-cols-1 2xl:grid-cols-3 xl:grid-cols-2 md:grid-cols-1">
     {#if Object.keys(data).length > 0}
         {#each data["functions"] as func}
-        <div class="">
-            <div class="flex flex-row items-center">
-                <button on:click={() => { isModalOpen = true; SetCurrentFunction(func);}} class="btn bg-green-600 hover:bg-green-700  text-green-100 h-12 w-20">Select</button>
-                <p class="text-4xl pl-8 pb-8 pt-6">{func["function"]}</p>
-            </div>
-
-            <p class="text-2xl pb-2">Arguments</p>          
-            {#each Object.keys(func["arguments"]) as argument}
-                <p class="text-xl pb-1">{argument}: {func["arguments"][argument]}</p>
-            {/each}
-        </div>      
+        <div class="flex flex-col">
+            <div class="card bg-base-100 w-96 shadow-2xl">
+                <div class="card-body">
+                    <h2 class="card-title text-3xl text-zinc-300">{func["function"]}</h2>
+                    <p class="text-xl">Arguments</p>
+                    {#each Object.keys(func["arguments"]) as argument}
+                        <p class="text-sm">{argument}: {func["arguments"][argument]}</p>
+                    {/each}
+                    <div class="card-actions justify-end">
+                        <button on:click={() => { isModalOpen = true; SetCurrentFunction(func);}} class="btn bg-green-600 hover:bg-green-700  text-green-100 h-12 w-20">Select</button>
+                    </div>
+                </div>
+            </div>    
+        </div>  
         {/each}
     {:else}
         <p class="text-center text-4xl">Server Is Down</p>

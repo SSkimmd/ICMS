@@ -34,7 +34,7 @@
         </div>
     {:else}
         <p class="text-center text-4xl">No Extensions</p>
-        <p class="text-center text-lg">Enable Extensions From The Config File</p>
+        <p class="text-center text-lg">Extensions Will Be Displayed Here</p>
     {/if}
 </div>
 

@@ -2,6 +2,7 @@ import logging
 import time
 import json as Json
 import sys
+import os
 
 from app import App as Server
 from threading import Thread
@@ -11,7 +12,6 @@ from user import User
 from flask_cors import CORS
 
 log = logging.getLogger('werkzeug')
-log.setLevel(logging.ERROR)
 
 app = Flask(__name__)
 CORS(app, resources={
@@ -72,17 +72,21 @@ def user_register():
 
 @app.route("/extensions/call", methods=["POST"])
 async def call_function():
+    global server
+
     data = request.get_json()
     response = await server.stream_server.process_request(data)
 
     status_code = response[0]
     response_data = response[1]
 
+    if status_code == 400:
+        server.stream_server.logger.error(response_data)
+
     return Response(status=status_code, response=Json.dumps(response_data))
 
 
-
-@app.route("/extensions")
+@app.route("/extensions", methods=["POST", "GET"])
 def get_extension_config():
     global server
 
@@ -103,8 +107,66 @@ def get_extension_config():
     status=200, 
     mimetype='application/json')    
 
+def reverse_readline(filename, buf_size=8192):
+    """A generator that returns the lines of a file in reverse order"""
+    with open(filename, 'rb') as fh:
+        segment = None
+        offset = 0
+        fh.seek(0, os.SEEK_END)
+        file_size = remaining_size = fh.tell()
+        while remaining_size > 0:
+            offset = min(file_size, offset + buf_size)
+            fh.seek(file_size - offset)
+            buffer = fh.read(min(remaining_size, buf_size))
+            # remove file's last "\n" if it exists, only for the first buffer
+            if remaining_size == file_size and buffer[-1] == ord('\n'):
+                buffer = buffer[:-1]
+            remaining_size -= buf_size
+            lines = buffer.split('\n'.encode())
+            # append last chunk's segment to this chunk's last line
+            if segment is not None:
+                lines[-1] += segment
+            segment = lines[0]
+            lines = lines[1:]
+            # yield lines in this chunk except the segment
+            for line in reversed(lines):
+                # only decode on a parsed line, to avoid utf-8 decode error
+                yield line.decode()
+        # Don't yield None if the file was empty
+        if segment is not None:
+            yield segment.decode()
+
+
+
+@app.route("/server-log", methods=["POST"])
+def server_log():
+    global server
+
+    data = request.get_json()
+    lines = int(data["lines"])
+    out = ""
+
+
+    log = reverse_readline("log.txt")
+
+    count = 0
+    for line in log:
+        if count == lines:
+            break
+
+        out += line
+        count += 1
+
+
+    return Response(
+        response=out, 
+        status=200, 
+        mimetype='application/json'
+    )                
+
+
 @app.route("/server-info")
-def info():
+def server_info():
     global server
     global server_thread
 
@@ -140,4 +202,4 @@ def stop():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8081, debug=False)
+    app.run(host="0.0.0.0", port=8081)
