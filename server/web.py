@@ -3,6 +3,7 @@ import time
 import json as Json
 import sys
 import os
+import ssl
 
 from app import App as Server
 from threading import Thread
@@ -11,21 +12,7 @@ from flask import Response
 from user import User
 from flask_cors import CORS
 
-log = logging.getLogger('werkzeug')
-
 app = Flask(__name__)
-CORS(app, resources={
-    "/*": {
-        "origins": "*"
-    }
-})
-server = Server()
-server.init_extensions()
-
-server_thread = Thread(target=server.start, daemon=True)
-server_thread.start()
-start_time = time.time()
-
 
 def start_server():
     global server
@@ -201,5 +188,31 @@ def stop():
     return Response("Stopping...", 200)
 
 
+def run_flask():
+    global server
+    global server_thread
+    global start_time
+
+    log = logging.getLogger('gunicorn.error')
+    #sslcontext = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    #sslcontext.load_cert_chain('certificates/cert.pem', keyfile='certificates/key.pem')
+    #sslcontext.verify_mode = ssl.VerifyMode.CERT_REQUIRED
+    #sslcontext.set_ciphers('ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384')
+
+    CORS(app, resources={
+        "/*": {
+            "origins": "*"
+        }
+    })
+
+    server = Server()
+    server.init_extensions()
+
+    server_thread = Thread(target=server.start, daemon=True)
+    server_thread.start()
+    start_time = time.time()
+
+    return app
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8081)
+    run_flask()

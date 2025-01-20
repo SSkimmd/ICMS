@@ -33,6 +33,10 @@ class LEDS(Extension):
         self.register_function(self.connect, {
             "device_name": "str"
         })
+        self.register_function(self.test)
+
+    async def test(self):
+        return "SUCCESS: Test Success"
 
     async def change_colour(self, device_name: str, r: int, g: int, b: int):
         if device_name not in self.devices:

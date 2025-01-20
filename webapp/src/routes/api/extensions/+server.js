@@ -3,8 +3,6 @@ import { json } from '@sveltejs/kit'
 export async function POST(event) {
     const data = await event.request.json();
 
-    console.log(data["arguments"]);
-
     const response = await fetch("http://0.0.0.0:8081/extensions/call", {
         method: 'POST',
         headers: {

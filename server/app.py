@@ -7,9 +7,9 @@ from stream import Server as StreamServer
 
 
 class App:
-    def __init__(self):
+    def __init__(self, ssl_context = None):
         self.extensions: map = {}
-        self.stream_server: StreamServer = StreamServer()
+        self.stream_server: StreamServer = StreamServer(ssl_context=ssl_context)
 
     #ensure these actually return errors at somepoint instead of just breaking
     def init_extensions(self):

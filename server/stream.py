@@ -5,6 +5,7 @@ import re
 import parsers as parsers
 import sys
 import logging
+import ssl
 
 
 from user import *
@@ -31,11 +32,12 @@ class NoColourFormatter(logging.Formatter):
 
 
 class Server:
-    def __init__(self, extensions: map = { }, users: dict[str, Connection] = { }):
+    def __init__(self, ssl_context = None, extensions: map = { }, users: dict[str, Connection] = { }):
         self.users: dict[int, Connection] = users
         self.extensions: map = extensions
         self.running = False
         self.server = None
+        self.ssl_context = ssl_context
 
 
         self.logger = logging.getLogger("werkzeug")
@@ -43,7 +45,7 @@ class Server:
 
 
         logformatter = NoColourFormatter()
-        loghandler = logging.FileHandler("log.txt", mode="a", encoding="utf8")
+        loghandler = logging.FileHandler("logs/log.txt", mode="a", encoding="utf8")
         streamhandler = logging.StreamHandler(sys.stdout)
         loghandler.setFormatter(logformatter)
         self.logger.addHandler(loghandler)
@@ -54,15 +56,16 @@ class Server:
         self.server.close()
 
     async def start(self):
-        self.server = await asyncio.start_server(self.update, '0.0.0.0', 8080)
+        if self.ssl_context is not None:
+            self.server = await asyncio.start_server(self.update, '0.0.0.0', 8080, ssl=self.ssl_context)
+        else:
+            self.server = await asyncio.start_server(self.update, '0.0.0.0', 8080)
+
         self.running = True
 
         async with self.server:
-            try:
-                self.logger.info('Stream Server Started.')
-                await self.server.serve_forever()
-            except CancelledError:
-                self.logger.info('Stream Server Closed.')
+            self.logger.info('Stream Server Started.')
+            await self.server.serve_forever()
 
     async def get_user(self, id = None, name = None):
         if id is not None:
@@ -233,7 +236,7 @@ class Server:
 
         while self.running:
             data = await reader.read(4096)
-            
+
             if not data:
                 if user is not None:
                     self.logger.info(f'Device Disconnected: {self.users[user.id]}')
