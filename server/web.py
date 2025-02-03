@@ -4,12 +4,13 @@ import json as Json
 import sys
 import os
 import ssl
+import util
 
 from app import App as Server
 from threading import Thread
 from flask import Flask, request
 from flask import Response
-from user import User
+from user import User, Connection, Device
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -55,14 +56,94 @@ def user_register():
 
     return(200, f'SUCCESS: Registered {username}')
 
+@app.route("/devices/add", methods=["POST"])
+async def add_device():
+    global server
+
+    data = request.get_json()
+    
+    connection_name = data["connection_name"]
+    name = data["device_name"]
+    type = data["device_type"]
+
+    response = await server.stream_server.add_device(connection_name, Device(name, type))
+
+    status_code = response[0]
+    response_data = response[1]
+
+    return Response(status=status_code, response=Json.dumps({ "response": response_data }))
+    #persistent device saving
 
 
-@app.route("/extensions/call", methods=["POST"])
+@app.route("/devices", methods=["GET"])
+async def get_devices():
+    global server
+
+    devices = server.stream_server.devices
+    devices_response = {}
+    for device in devices:
+        devices_response[device] = {
+            "device_name": devices[device].device_name,
+            "device_type": devices[device].device_type
+        }
+    return Response(status=200, response=Json.dumps(devices_response))
+
+@app.route("/device", methods=["POST"])
+async def call_device():
+    global server
+
+    data = request.get_json()
+    response = await server.stream_server.call_device(data)
+
+    status_code = response[0]
+    response_data = response[1]
+
+    if status_code == 400:
+        server.stream_server.logger.error(response_data)
+
+    return Response(status=status_code, response=Json.dumps(response_data))
+
+@app.route("/connections", methods=["GET"])
+async def get_connections():
+    global server
+
+    connections = server.stream_server.connections
+    connections_response = []
+    for connection in connections:
+        if connections[connection].device is not None:
+            continue
+
+        name = connections[connection].connection_name
+        connections_response.append(name)
+
+    return Response(status=200, response=Json.dumps(connections_response))
+
+@app.route("/extension", methods=["POST"])
+async def get_extension():
+    global server
+
+    data = request.get_json()
+
+    if "module" not in data:
+        return Response(status=400, response=Json.dumps({}))
+
+    name = data["module"]
+    response = await server.stream_server.get_extensions(name)
+
+    status_code = response[0]
+    response_data = response[1]
+
+    if status_code == 400:
+        server.stream_server.logger.error(response_data)
+
+    return Response(status=status_code, response=Json.dumps(response_data))
+
+@app.route("/extensions", methods=["POST"])
 async def call_function():
     global server
 
     data = request.get_json()
-    response = await server.stream_server.process_request(data)
+    response = await server.stream_server.call_function(data)
 
     status_code = response[0]
     response_data = response[1]
@@ -73,7 +154,7 @@ async def call_function():
     return Response(status=status_code, response=Json.dumps(response_data))
 
 
-@app.route("/extensions", methods=["POST", "GET"])
+@app.route("/extensions", methods=["GET"])
 def get_extension_config():
     global server
 
@@ -94,38 +175,9 @@ def get_extension_config():
     status=200, 
     mimetype='application/json')    
 
-def reverse_readline(filename, buf_size=8192):
-    """A generator that returns the lines of a file in reverse order"""
-    with open(filename, 'rb') as fh:
-        segment = None
-        offset = 0
-        fh.seek(0, os.SEEK_END)
-        file_size = remaining_size = fh.tell()
-        while remaining_size > 0:
-            offset = min(file_size, offset + buf_size)
-            fh.seek(file_size - offset)
-            buffer = fh.read(min(remaining_size, buf_size))
-            # remove file's last "\n" if it exists, only for the first buffer
-            if remaining_size == file_size and buffer[-1] == ord('\n'):
-                buffer = buffer[:-1]
-            remaining_size -= buf_size
-            lines = buffer.split('\n'.encode())
-            # append last chunk's segment to this chunk's last line
-            if segment is not None:
-                lines[-1] += segment
-            segment = lines[0]
-            lines = lines[1:]
-            # yield lines in this chunk except the segment
-            for line in reversed(lines):
-                # only decode on a parsed line, to avoid utf-8 decode error
-                yield line.decode()
-        # Don't yield None if the file was empty
-        if segment is not None:
-            yield segment.decode()
 
 
-
-@app.route("/server-log", methods=["POST"])
+@app.route("/serverlog", methods=["POST"])
 def server_log():
     global server
 
@@ -134,14 +186,17 @@ def server_log():
     out = ""
 
 
-    log = reverse_readline("log.txt")
+    log = util.reverse_readline("logs/log.txt")
 
     count = 0
     for line in log:
         if count == lines:
             break
 
-        out += line
+        if line[0:2] == "  ":
+            continue
+
+        out += line + "\n"
         count += 1
 
 
@@ -188,7 +243,7 @@ def stop():
     return Response("Stopping...", 200)
 
 
-def run_flask():
+def run_flask(should_return = True):
     global server
     global server_thread
     global start_time
@@ -212,7 +267,8 @@ def run_flask():
     server_thread.start()
     start_time = time.time()
 
-    return app
+    if should_return:
+        return app
 
 if __name__ == "__main__":
-    run_flask()
+    run_flask(False)

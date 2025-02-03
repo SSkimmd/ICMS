@@ -3,18 +3,11 @@ from threading import Thread
 import asyncio
 import time
 import json as Json
-
-
-class Connection:
-    def __init__(self, id: int, writer: asyncio.StreamWriter, reader: asyncio.StreamReader, device_name = None, device_type = None):
-        self.id = id
-        self.writer: asyncio.StreamWriter = writer
-        self.reader: asyncio.StreamReader = reader
-        self.device_name = device_name
-        self.device_type = device_type
+from user import Connection
+from stream import Server as StreamServer
 
 class LEDS(Extension):
-    def __init__(self, server):
+    def __init__(self, server: StreamServer):
         super().__init__(server)
         
         self.colour = 0
@@ -34,6 +27,10 @@ class LEDS(Extension):
             "device_name": "str"
         })
         self.register_function(self.test)
+
+
+    async def device_callback(self, data):
+        print(f'callback called, data: {data}')
 
     async def test(self):
         return "SUCCESS: Test Success"
@@ -62,7 +59,11 @@ class LEDS(Extension):
     
     # connect led controller
     async def connect(self, device_name):
-        self.devices[device_name] = await self.server.get_user(name=device_name)
+        device = await self.server.get_connection(name=device_name)
+
+        if device is None: return "ERROR: Device Doesn't Exist"
+        
+        self.devices[device_name] = device
 
 def initialise(server):
     leds = LEDS(server)

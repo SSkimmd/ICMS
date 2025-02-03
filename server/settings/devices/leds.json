@@ -1,0 +1,5 @@
+{
+    "connection_name": "leds",
+    "device_name": "LED Controller",
+    "device_type": "Both"
+}

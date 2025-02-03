@@ -1,39 +1,545 @@
-[INFO] [werkzeug]: Stream Server Started.
-[INFO] [werkzeug]: Connection From ('127.0.0.1', 58642)
-[INFO] [werkzeug]: Connection From ('127.0.0.1', 58657)
-[INFO] [werkzeug]: Connection From ('127.0.0.1', 58687)
-[INFO] [werkzeug]: Connection From ('127.0.0.1', 58695)
-[ERROR] [werkzeug]: ERROR: Device Does Not Exist
-[INFO] [werkzeug]: Connection From ('127.0.0.1', 58706)
-[INFO] [werkzeug]: Connection From ('127.0.0.1', 58713)
-[INFO] [werkzeug]: Connection From ('127.0.0.1', 58738)
-[INFO] [werkzeug]: Connection From ('127.0.0.1', 58752)
-[INFO] [werkzeug]: Connection From ('127.0.0.1', 58806)
-[INFO] [werkzeug]: Connection From ('127.0.0.1', 58815)
-[INFO] [werkzeug]: Connection From ('127.0.0.1', 58822)
-[INFO] [werkzeug]: Connection From ('127.0.0.1', 58846)
-[INFO] [werkzeug]: Connection From ('127.0.0.1', 58863)
-[INFO] [werkzeug]: Connection From ('127.0.0.1', 58915)
-[INFO] [werkzeug]: Connection From ('127.0.0.1', 58935)
-[INFO] [werkzeug]: Stream Server Started.
-[INFO] [werkzeug]: Connection From ('127.0.0.1', 58990)
-[INFO] [werkzeug]: Connection From ('127.0.0.1', 59001)
-[INFO] [werkzeug]: Connection From ('127.0.0.1', 59027)
-[INFO] [werkzeug]: Connection From ('127.0.0.1', 59058)
-[INFO] [werkzeug]: Connection From ('127.0.0.1', 59066)
-[INFO] [werkzeug]: Connection From ('127.0.0.1', 59086)
-[INFO] [werkzeug]: Stream Server Started.
-[INFO] [werkzeug]: Stream Server Started.
-[INFO] [werkzeug]: Connection From ('127.0.0.1', 59106)
-[INFO] [werkzeug]: Connection From ('127.0.0.1', 59106)
-[INFO] [werkzeug]: Connection From ('127.0.0.1', 59116)
-[INFO] [werkzeug]: Connection From ('127.0.0.1', 59116)
-[INFO] [werkzeug]: Connection From ('127.0.0.1', 59124)
-[INFO] [werkzeug]: Connection From ('127.0.0.1', 59124)
-[ERROR] [werkzeug]: ERROR: Device Does Not Exist
-[ERROR] [werkzeug]: ERROR: Device Does Not Exist
-[INFO] [werkzeug]: Stream Server Started.
-[INFO] [werkzeug]: Connection From ('127.0.0.1', 59202)
-[INFO] [werkzeug]: Connection From ('127.0.0.1', 59209)
-[ERROR] [werkzeug]: ERROR: Device Does Not Exist
-[INFO] [werkzeug]: Stream Server Started.
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.150', 50260)
+[INFO] [gunicorn.error]: Worker exiting (pid: 62)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.150', 50262)
+[INFO] [gunicorn.error]: Worker exiting (pid: 69)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.150', 50263)
+[INFO] [gunicorn.error]: Worker exiting (pid: 82)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.150', 50264)
+[INFO] [gunicorn.error]: Worker exiting (pid: 87)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.150', 50265)[INFO] [gunicorn.error]: Worker exiting (pid: 104)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.150', 50266)
+[2025-02-03 07:42:09,595] ERROR in app: Exception on /device [POST]
+Traceback (most recent call last):
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 254, in __call__
+    return call_result.result()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 331, in main_wrap
+    result = await self.awaitable(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/web.py", line 96, in call_device
+    response = await server.stream_server.call_device(data)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/stream.py", line 120, in call_device
+    device = await self.get_connection(name=device_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/stream.py", line 58, in get_connection
+    if self.connections[id].device.device_name == name:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'device_name'
+[2025-02-03 07:42:33,598] ERROR in app: Exception on /device [POST]
+Traceback (most recent call last):
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 254, in __call__
+    return call_result.result()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 331, in main_wrap
+    result = await self.awaitable(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/web.py", line 96, in call_device
+    response = await server.stream_server.call_device(data)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/stream.py", line 120, in call_device
+    device = await self.get_connection(name=device_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/stream.py", line 58, in get_connection
+    if self.connections[id].device.device_name == name:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'device_name'
+[2025-02-03 07:42:58,740] ERROR in app: Exception on /device [POST]
+Traceback (most recent call last):
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 254, in __call__
+    return call_result.result()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 331, in main_wrap
+    result = await self.awaitable(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/web.py", line 96, in call_device
+    response = await server.stream_server.call_device(data)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/stream.py", line 120, in call_device
+    device = await self.get_connection(name=device_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/stream.py", line 58, in get_connection
+    if self.connections[id].device.device_name == name:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'device_name'
+[INFO] [gunicorn.error]: Worker exiting (pid: 149)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.150', 50267)
+[INFO] [gunicorn.error]: Worker exiting (pid: 191)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.150', 56321)
+[INFO] [gunicorn.error]: Connection From ('192.168.0.150', 56322)
+[INFO] [gunicorn.error]: Worker exiting (pid: 25)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.150', 56323)
+[2025-02-03 10:09:07,858] ERROR in app: Exception on /device [POST]
+Traceback (most recent call last):
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 254, in __call__
+    return call_result.result()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 331, in main_wrap
+    result = await self.awaitable(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/web.py", line 96, in call_device
+    response = await server.stream_server.call_device(data)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/stream.py", line 120, in call_device
+    device = await self.get_connection(name=device_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/stream.py", line 58, in get_connection
+    if self.connections[id].device.device_name == name:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'device_name'
+[INFO] [gunicorn.error]: Worker exiting (pid: 50)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.150', 56324)
+[INFO] [gunicorn.error]: Worker exiting (pid: 62)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.150', 56325)
+[2025-02-03 10:10:54,361] ERROR in app: Exception on /device [POST]
+Traceback (most recent call last):
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 254, in __call__
+    return call_result.result()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 331, in main_wrap
+    result = await self.awaitable(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/web.py", line 96, in call_device
+    response = await server.stream_server.call_device(data)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/stream.py", line 122, in call_device
+    device = await self.get_connection(name=device_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/stream.py", line 60, in get_connection
+    if self.connections[id].device.device_name == name:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'device_name'
+[INFO] [gunicorn.error]: Worker exiting (pid: 73)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.150', 56326)
+[INFO] [gunicorn.error]: Worker exiting (pid: 85)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.150', 56327)
+[2025-02-03 10:11:55,662] ERROR in app: Exception on /device [POST]
+Traceback (most recent call last):
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 254, in __call__
+    return call_result.result()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 331, in main_wrap
+    result = await self.awaitable(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/web.py", line 96, in call_device
+    response = await server.stream_server.call_device(data)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/stream.py", line 123, in call_device
+    device = await self.get_connection(name=device_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/stream.py", line 61, in get_connection
+    if self.connections[id].device.device_name == name:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'device_name'
+[INFO] [gunicorn.error]: Worker exiting (pid: 90)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.150', 56328)
+[2025-02-03 10:14:40,985] ERROR in app: Exception on /devices/add [POST]
+Traceback (most recent call last):
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 254, in __call__
+    return call_result.result()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 331, in main_wrap
+    result = await self.awaitable(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/web.py", line 69, in add_device
+    response = await server.stream_server.add_device(connection_name, Device(name, type))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/stream.py", line 74, in add_device
+    connection.device = self.devices[connection_name]
+    ^^^^^^^^^^^^^^^^^
+AttributeError: 'coroutine' object has no attribute 'device'
+[INFO] [gunicorn.error]: Worker exiting (pid: 110)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.150', 56329)
+[2025-02-03 10:15:20,679] ERROR in app: Exception on /devices/add [POST]
+Traceback (most recent call last):
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 254, in __call__
+    return call_result.result()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 331, in main_wrap
+    result = await self.awaitable(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/web.py", line 69, in add_device
+    response = await server.stream_server.add_device(connection_name, Device(name, type))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/stream.py", line 73, in add_device
+    connection: Connection = await self.get_connection(name=device.device_name)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/stream.py", line 61, in get_connection
+    if self.connections[id].device.device_name == name:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'device_name'
+[INFO] [gunicorn.error]: Worker exiting (pid: 118)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.150', 56330)
+[INFO] [gunicorn.error]: Connection From ('192.168.0.150', 56331)
+[INFO] [gunicorn.error]: Worker exiting (pid: 130)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.150', 56332)
+[INFO] [gunicorn.error]: Worker exiting (pid: 138)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.150', 56333)
+[2025-02-03 10:20:17,644] ERROR in app: Exception on /devices/add [POST]
+Traceback (most recent call last):
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 254, in __call__
+    return call_result.result()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 331, in main_wrap
+    result = await self.awaitable(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/web.py", line 69, in add_device
+    response = await server.stream_server.add_device(connection_name, Device(name, type))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/stream.py", line 173, in add_device
+    print(await self.get_connection(name=connection_name))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/stream.py", line 61, in get_connection
+    if self.connections[id].device.device_name == name:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'device_name'
+[INFO] [gunicorn.error]: Connection From ('192.168.0.150', 56334)
+[INFO] [gunicorn.error]: Worker exiting (pid: 147)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.150', 56337)
+[INFO] [gunicorn.error]: Worker exiting (pid: 163)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58245)
+[INFO] [gunicorn.error]: Worker exiting (pid: 193)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58248)
+[INFO] [gunicorn.error]: Worker exiting (pid: 207)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58249)
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58250)
+[INFO] [gunicorn.error]: Device Disconnected: awd
+[INFO] [gunicorn.error]: Worker exiting (pid: 220)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58252)
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58253)
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58254)
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58255)
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58256)
+[INFO] [gunicorn.error]: Worker exiting (pid: 244)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58257)
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58258)
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58259)
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58260)
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58261)
+[INFO] [gunicorn.error]: Device Disconnected: awd
+[INFO] [gunicorn.error]: Device Disconnected: awd
+[INFO] [gunicorn.error]: Worker exiting (pid: 249)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58262)
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58263)
+[INFO] [gunicorn.error]: Device Disconnected: awd
+[INFO] [gunicorn.error]: Worker exiting (pid: 254)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58264)
+[INFO] [gunicorn.error]: Device Disconnected: awd
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58265)
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58266)
+[INFO] [gunicorn.error]: Device Disconnected: awd
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58267)
+[INFO] [gunicorn.error]: Device Disconnected: awd
+[ERROR] [gunicorn.error]: ERROR: Device Not Found
+[INFO] [gunicorn.error]: Worker exiting (pid: 264)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58269)
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58270)
+[INFO] [gunicorn.error]: Device Disconnected: awd
+[INFO] [gunicorn.error]: Device Disconnected: awd
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58271)
+[INFO] [gunicorn.error]: Worker exiting (pid: 274)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58272)
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58273)
+[INFO] [gunicorn.error]: Device Disconnected: awd
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58274)
+[INFO] [gunicorn.error]: Worker exiting (pid: 287)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58276)
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58277)
+[INFO] [gunicorn.error]: Device Disconnected: awd
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58278)
+[INFO] [gunicorn.error]: Device Disconnected: awd
+[ERROR] [gunicorn.error]: ERROR: Device Not Found
+[ERROR] [gunicorn.error]: ERROR: Device Not Found
+[ERROR] [gunicorn.error]: ERROR: Device Not Found
+[INFO] [gunicorn.error]: Worker exiting (pid: 301)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58279)
+[INFO] [gunicorn.error]: Worker exiting (pid: 316)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58280)
+[INFO] [gunicorn.error]: Worker exiting (pid: 327)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58281)
+[INFO] [gunicorn.error]: Worker exiting (pid: 333)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58282)
+[INFO] [gunicorn.error]: Worker exiting (pid: 339)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58283)
+[INFO] [gunicorn.error]: Worker exiting (pid: 345)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58284)
+[INFO] [gunicorn.error]: Worker exiting (pid: 351)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58285)
+[INFO] [gunicorn.error]: Worker exiting (pid: 357)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58286)
+[INFO] [gunicorn.error]: Worker exiting (pid: 363)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58287)
+[INFO] [gunicorn.error]: Worker exiting (pid: 369)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58288)
+[INFO] [gunicorn.error]: Device Disconnected: awd
+[INFO] [gunicorn.error]: Worker exiting (pid: 375)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58289)
+[INFO] [gunicorn.error]: Worker exiting (pid: 381)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58290)
+[INFO] [gunicorn.error]: Worker exiting (pid: 391)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58291)
+[INFO] [gunicorn.error]: Worker exiting (pid: 397)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58292)
+[INFO] [gunicorn.error]: Worker exiting (pid: 403)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58293)
+[INFO] [gunicorn.error]: Worker exiting (pid: 409)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58294)
+[INFO] [gunicorn.error]: Worker exiting (pid: 415)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58295)
+[INFO] [gunicorn.error]: Worker exiting (pid: 421)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58296)
+[INFO] [gunicorn.error]: Device Disconnected: awd
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58297)
+[INFO] [gunicorn.error]: Worker exiting (pid: 427)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58298)
+[INFO] [gunicorn.error]: Worker exiting (pid: 471)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58299)
+[ERROR] [gunicorn.error]: ERROR: Device Doesn't Exist
+[ERROR] [gunicorn.error]: ERROR: Device Does Not Exist
+[ERROR] [gunicorn.error]: ERROR: Device Doesn't Exist
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58300)
+[INFO] [gunicorn.error]: Device Disconnected: LED Controller
+[INFO] [gunicorn.error]: Connection From ('192.168.0.76', 58301)
+[INFO] [gunicorn.error]: Device Disconnected: LED Controller
+[ERROR] [gunicorn.error]: ERROR: Device Not Found
+[ERROR] [gunicorn.error]: ERROR: Device Not Found
+[ERROR] [gunicorn.error]: ERROR: Device Not Found
+[ERROR] [gunicorn.error]: ERROR: Device Not Found
+[ERROR] [gunicorn.error]: ERROR: Device Not Found
+[ERROR] [gunicorn.error]: ERROR: Device Not Found
+[ERROR] [gunicorn.error]: ERROR: Device Not Found
+[ERROR] [gunicorn.error]: ERROR: Device Not Found
+[ERROR] [gunicorn.error]: ERROR: Device Not Found
+[ERROR] [gunicorn.error]: ERROR: Device Not Found
+[ERROR] [gunicorn.error]: ERROR: Device Not Found
+[ERROR] [gunicorn.error]: ERROR: Device Not Found
+[INFO] [gunicorn.error]: Worker exiting (pid: 499)

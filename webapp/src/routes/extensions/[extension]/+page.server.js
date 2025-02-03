@@ -10,7 +10,7 @@ export const load = async ({ params }) => {
 
         let extension_name = params["extension"];
 
-        var response = await fetch("http://0.0.0.0:8080/", {
+        var response = await fetch("http://0.0.0.0:8081/extension", {
             signal: AbortSignal.timeout(3000),
             method: 'POST',
             headers: {

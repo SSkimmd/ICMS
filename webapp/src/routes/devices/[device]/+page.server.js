@@ -11,20 +11,15 @@ export const load = async ({ params }) => {
         let device_name = params["device"];
         device_name = device_name.replace("%20", " ");
 
-        var response = await fetch("http://0.0.0.0:8080/", {
+        var response = await fetch("http://0.0.0.0:8081/devices", {
             signal: AbortSignal.timeout(3000),
-            method: 'POST',
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                "type": "GET",
-                "device": "all"
-            })
+            }
         });
         const data = await response.json();
-        data["devices"][device_name]["device"] = device_name;
-        return { ...data["devices"][device_name] }
+        return { ...data[device_name] }
     } catch { 
         return {}
     }

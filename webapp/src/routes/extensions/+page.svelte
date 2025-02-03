@@ -11,7 +11,10 @@
 </body>
 
 <div class="sm:pl-60 pr-20 pt-20 min-h-screen flex flex-col border-red-400">
-    {#if Object.keys(data).length > 0}
+    {#if 'server_down' in data}
+        <p class="text-center text-4xl">Server Is Down</p>
+        <p class="text-center text-lg">Extensions Will Be Displayed Here</p>        
+    {:else}
         <p class="text-6xl sm:pl-2 pl-12">Extensions</p>
         <div class="grid grid-flow-row sm:grid-cols-1 2xl:grid-cols-3 xl:grid-cols-2 md:grid-cols-1">
             {#each Object.keys(data) as extension}
@@ -32,9 +35,6 @@
                 </div>
             {/each}
         </div>
-    {:else}
-        <p class="text-center text-4xl">No Extensions</p>
-        <p class="text-center text-lg">Extensions Will Be Displayed Here</p>
     {/if}
 </div>
 
