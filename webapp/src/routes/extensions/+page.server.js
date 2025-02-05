@@ -1,6 +1,6 @@
 export const load = async () => {
     try {
-        var response = await fetch("http://0.0.0.0:8081/server-info", {
+        var response = await fetch("http://0.0.0.0:8081/serverInfo", {
             signal: AbortSignal.timeout(3000),
             method: 'GET'
         });

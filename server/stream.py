@@ -18,7 +18,6 @@ class Server:
 
         self.extensions: map = extensions
         self.running = False
-        self.server = None
         self.ssl_context = ssl_context
 
         self.logger = logging.getLogger("gunicorn.error")
@@ -32,21 +31,17 @@ class Server:
         self.logger.addHandler(loghandler)
         self.logger.addHandler(streamhandler)
 
-    def close(self):
+    async def close(self):
         self.running = False
         self.server.close()
 
     async def start(self):
-        if self.ssl_context is not None:
-            self.server = await asyncio.start_server(self.update, '0.0.0.0', 8080, ssl=self.ssl_context)
-        else:
-            self.server = await asyncio.start_server(self.update, '0.0.0.0', 8080)
-
         self.running = True
+        self.logger.info(f'Stream Server Listening at: 0.0.0.0:8080')
+        self.server = await asyncio.start_server(self.update, '0.0.0.0', 8080)
 
-        async with self.server:
-            self.logger.info(f'Stream Server Listening at: 0.0.0.0:8080')
-            await self.server.serve_forever()
+        await self.server.serve_forever()
+
 
     async def get_connection(self, id = None, name = None, connection_name = None):
         if id is not None:
@@ -314,7 +309,3 @@ class Server:
                     string = f'HTTP/1.1 400 Bad Request\r\nContent-Type: application/json; charset=utf-8\r\nContent-Length: {len(json)}\r\n\n{json}'
                     writer.write(string.encode())
                     await writer.drain()
-
-if __name__ == "__main__":
-    server = Server()
-    asyncio.run(server.start())

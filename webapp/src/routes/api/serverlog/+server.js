@@ -4,7 +4,7 @@ export async function POST(event) {
     const data = await event.request.json();
 
     try {
-        const response = await fetch("http://0.0.0.0:8081/serverlog", {
+        const response = await fetch("http://0.0.0.0:8081/serverLog", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
