@@ -18,11 +18,13 @@
             },
             body: JSON.stringify({
                 "device": data["device_name"],
-                "message": JSON.parse(CurrentFunctionArguments)
+                "function": "test",
+                "arguments": JSON.parse(CurrentFunctionArguments)
             })
         })
 
         const jsonResponse = await response.json();
+
         requestResult = jsonResponse;
     }
 </script>

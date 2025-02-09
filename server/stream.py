@@ -6,17 +6,18 @@ import util
 import sys
 import logging
 import ssl
+import extension as Extension
 
 from asyncio import CancelledError
 from user import *
 from pydoc import locate
 
 class Server:
-    def __init__(self, ssl_context = None, extensions: map = { }):
+    def __init__(self, ssl_context = None, extensions: map = None):
         self.connections: dict[int, Connection] = {}
         self.devices: dict[str, Device] = {}
 
-        self.extensions: map = extensions
+        self.extensions: map[str, Extension.Extension] = extensions
         self.running = False
         self.ssl_context = ssl_context
 
@@ -42,7 +43,6 @@ class Server:
 
         await self.server.serve_forever()
 
-
     async def get_connection(self, id = None, name = None, connection_name = None):
         if id is not None:
             if self.connections[id] is not None:
@@ -62,8 +62,7 @@ class Server:
     
     async def get_device(self, device_name):
         if self.devices[device_name] is not None:
-            return self.devices[device_name]
-        
+            return self.devices[device_name]  
         return None
 
     async def get_extensions(self, extension_name):
@@ -74,10 +73,11 @@ class Server:
                 response[extension] = {}
                 response[extension]["functions"] = []
 
-                functions = self.extensions[extension].get_functions()
+                extension_object: Extension.Extension = self.extensions[extension]
+                functions = extension_object.get_functions()
 
                 for func in functions:
-                    arguments = self.extensions[extension].functions[func]["arguments"]
+                    arguments = extension_object.functions[func]["arguments"]
                     response[extension]["functions"].append({
                         "function": func,
                         "arguments": arguments
@@ -86,12 +86,12 @@ class Server:
             if extension_name not in self.extensions: 
                 return (400, 'ERROR: Module Not Found')
 
-            extension = self.extensions[extension_name]
+            extension: Extension.Extension = self.extensions[extension_name]
 
             response[extension_name] = {}
             response[extension_name]["functions"] = []
 
-            functions = self.extensions[extension_name].get_functions()
+            functions = extension.get_functions()
 
             for func in functions:
                 response[extension_name]["functions"].append(func)      
@@ -101,9 +101,8 @@ class Server:
         else:
             return (400, response)
 
-
     async def call_device(self, request):
-        if "device" not in request and "message" not in request:
+        if "device" not in request and "function" not in request and "arguments" not in request:
             return (400, "ERROR: Multiple Key Errors")
         
         device_name = request["device"]
@@ -111,16 +110,18 @@ class Server:
 
         if device is None:
             return (400, "ERROR: Device Not Found")
+        
+        request_arguments = request["arguments"]
+        request_function = request["function"]
 
         message = {
             "type": "POST",
-            "function": "solid_colour",
-            "arguments": request['message']
+            "function": request_function,
+            "arguments": request_arguments
         }
 
-        json_message = Json.dumps(message)                    
+        json_message = Json.dumps(message)                
         device.writer.write(json_message.encode())
-
         await device.writer.drain()
 
         return (200, f'SUCCESS: Sent Message To Device: {device_name}')
@@ -134,20 +135,21 @@ class Server:
             return (400, 'ERROR: Key Error (module)')
 
         function_name = request["function"]
-        if function_name not in self.extensions[extension_name].functions: 
+        extension: Extension.Extension = self.extensions[extension_name]
+        if function_name not in extension.functions: 
             return (400, 'ERROR: Key Error (function)')
 
         arguments = request["arguments"]
         arguments_length = len(arguments)
-        expected_length = self.extensions[extension_name].functions[function_name]['function'].__code__.co_argcount - 1
+        expected_length = extension.functions[function_name]['function'].__code__.co_argcount - 1
 
         if arguments_length != expected_length: 
             return (400, f'ERROR: Argument Error: Expected {expected_length} - Found {arguments_length}')
 
         try:
             #check argument types
-            if(self.extensions[extension_name].functions[function_name]["arguments"]):
-                args = self.extensions[extension_name].functions[function_name]["arguments"]
+            if(extension.functions[function_name]["arguments"]):
+                args = extension.functions[function_name]["arguments"]
                 for argument in arguments:
                     try:
                         arg_type = locate(args[argument])
@@ -156,7 +158,7 @@ class Server:
                         return(400, f'ERROR: Argument Error: {argument} Has Incorrect Type')
 
 
-            response = await self.extensions[extension_name].functions[function_name]["function"](**arguments)
+            response = await extension.functions[function_name]["function"](**arguments)
 
             if response:
                 if type(response) == str:
@@ -246,10 +248,19 @@ class Server:
         self.logger.info('Connection From {}'.format(peername))
 
         #log user
-        connection = None
+        connection: Connection = Connection(len(self.connections), writer, reader)
+        self.connections[connection.id] = connection
+        connection.connected = True
 
-        while self.running:
-            data = await reader.read(4096)
+        while connection.connected:
+            data = await reader.read(1024)
+
+            if not data:
+                if connection is not None:
+                    self.logger.info(f'Device Disconnected: {self.connections[connection.id].device.device_name}')
+                    connection.connected = False
+                    del self.connections[connection.id]
+                break
 
             if connection is not None:
                 if(len(connection.callbacks) > 0):
@@ -259,53 +270,10 @@ class Server:
                         if not callback.is_persistent:
                             connection.callbacks.remove(callback)
 
-            if not data:
-                if connection is not None:
-                    self.logger.info(f'Device Disconnected: {self.connections[connection.id].device.device_name}')
-                    del self.connections[connection.id]
-                break
-
-            http_request = None
             try:
-                http_request = await util.RequestParser(data.decode()).to_request()
-            except:
-                if connection is not None: 
-                    continue
-
-                connection = Connection(len(self.connections), writer, reader)
-                self.connections[connection.id] = connection
-
-
-
-            #f request is not a HTTP request
-            if http_request is None:
-                try:
-                    request = Json.loads(data.decode())    
-
-                    response = await self.process_request(request, connection)
-
-                    string = Json.dumps(response) 
-                    writer.write(string.encode())
-                    await writer.drain()
-                except:
-                    continue
-            #If request is a HTTP request
-            else:
-                try:
-                    request_json = ''.join(http_request.data)
-                    request = Json.loads(request_json)
-
-                    response = await self.process_request(request)
-                    response_json = Json.dumps(response[1])
-
-                    return_code = 'OK' if response[0] == 200 else 'Bad Request'
-
-                    string = f'HTTP/1.1 {str(response[0])} {return_code}\r\nContent-Type: application/json; charset=utf-8\r\nContent-Length: {len(response_json)}\r\n\n{response_json}'
-
-                    writer.write(string.encode())
-                    await writer.drain()
-                except:
-                    json = Json.dumps({})
-                    string = f'HTTP/1.1 400 Bad Request\r\nContent-Type: application/json; charset=utf-8\r\nContent-Length: {len(json)}\r\n\n{json}'
-                    writer.write(string.encode())
-                    await writer.drain()
+                request = Json.loads(data.decode())
+                response = await self.process_request(request, connection)
+                writer.write(Json.dumps(response).encode())
+                await writer.drain()
+            except Exception as e:
+                self.logger.info(repr(e))

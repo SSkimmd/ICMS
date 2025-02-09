@@ -19,6 +19,6 @@ class Test(Extension):
         return self.volume
 
 
-def initialise(server):
+def initialise(server) -> Extension:
     test = Test(server)
     return test

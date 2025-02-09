@@ -14,7 +14,11 @@ class Connection:
         self.callbacks: list[Callback] = []
         self.connection_name = ""
         self.device: Device = None
-        self.endpoints: list[str] = endpoints
+        self.connected = False
+        if endpoints is None:
+            self.endpoints: list[str] = []
+        else:
+            self.endpoints = endpoints
 
     def create_callback(self, function, is_persistent):
         new_callback = Callback(function, is_persistent)

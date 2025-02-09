@@ -1,5 +1,6 @@
 <script>
     import Sidebar from "../../components/sidebar/sidebar.svelte";
+    import Icon from "@iconify/svelte";
     export let data;
 
     let newDeviceModalOpen = false;
@@ -107,8 +108,14 @@
     {:else}
         <div>
             <p class="text-6xl sm:pl-2 pl-12 pb-10">Devices</p>
-            <button on:click={() => { newDeviceModalOpen = true; }} class="btn bg-green-600 hover:bg-green-700 text-green-100">Add Device</button>
-            <button on:click={() => { }} class="btn bg-red-500 hover:bg-red-500 text-red-100">Remove Device</button>
+            <button on:click={() => { newDeviceModalOpen = true; }} class="btn bg-green-600 hover:bg-green-700 text-green-100">
+                <Icon class="w-4 h-4" icon="gala:add"/>
+                Add Device
+            </button>
+            <button on:click={() => { }} class="btn bg-red-500 hover:bg-red-500 text-red-100">
+                <Icon class="w-4 h-4" icon="gala:remove"/>
+                Remove Device
+            </button>
         </div>
         <div class="grid grid-flow-row sm:grid-cols-1 2xl:grid-cols-3 xl:grid-cols-2 md:grid-cols-1">
             <div class="pt-10">

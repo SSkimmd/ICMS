@@ -65,6 +65,6 @@ class LEDS(Extension):
         
         self.devices[device_name] = device
 
-def initialise(server):
+def initialise(server) -> Extension:
     leds = LEDS(server)
     return leds

@@ -28,7 +28,7 @@
                             {:else}
                                 <button class="btn bg-green-600 hover:bg-green-700 text-green-100">Enable</button>
                             {/if}
-                            <a href={"/extensions/" + extension} class="btn bg-slate-400 hover:bg-slate-500 text-slate-700">View API</a>
+                            <a href={"/extensions/" + extension} class="btn text-gray-400 border-1">View API</a>
                         </div>
                         </div>
                     </div>

@@ -19,6 +19,6 @@ class Spotify(Extension):
         return self.volume
 
 
-def initialise(server):
+def initialise(server) -> Extension:
     spotify = Spotify(server)
     return spotify

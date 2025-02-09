@@ -3,15 +3,18 @@ import { json } from '@sveltejs/kit'
 export async function POST(event) {
     const data = await event.request.json();
 
+    const jsonData = JSON.stringify({
+        "device": data["device"],
+        "function": data["function"],
+        "arguments": data["arguments"]
+    })
+
     const response = await fetch("http://0.0.0.0:8081/device", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-            "device": data["device"],
-            "message": data["message"]
-        })
+        body: jsonData
     });
 
     const jsonResponse = await response.json();
@@ -20,5 +23,6 @@ export async function POST(event) {
         "status": response.status,
         "response": jsonResponse
     };
+
     return json(requestResult);
 }
