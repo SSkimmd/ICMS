@@ -3,7 +3,7 @@ from threading import Thread
 import asyncio
 import time
 import json as Json
-from user import Connection
+from datatypes import Connection
 from stream import Server as StreamServer
 
 class LEDS(Extension):

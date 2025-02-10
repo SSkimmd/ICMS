@@ -84,7 +84,11 @@
             <div class="card bg-base-100 w-96 shadow-2xl">
                 <div class="card-body">
                     <h2 class="card-title text-3xl text-zinc-300">{func["function"]}</h2>
-                    <p class="text-xl">Arguments</p>
+                    {#if Object.keys(func["arguments"]).length > 0}
+                        <p class="text-xl">Arguments</p>
+                    {:else}
+                        <p>No Arguments</p>
+                    {/if}
                     {#each Object.keys(func["arguments"]) as argument}
                         <p class="text-sm font-mono">{argument}: {func["arguments"][argument]}</p>
                     {/each}

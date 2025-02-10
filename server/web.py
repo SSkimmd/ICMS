@@ -13,7 +13,7 @@ from extension import Extension
 from threading import Thread
 from flask import Flask, request
 from flask import Response
-from user import User, Connection, Device
+from datatypes import Device, Connection, User, Callback
 from flask_cors import CORS
 from stream import Server as StreamServer
 
@@ -173,7 +173,7 @@ class WebServer:
         response_data = response[1]
 
         if status_code == 400:
-            self.server.logger.error(response_data)
+            self.server.logger.error(str(response_data))
 
         return Response(status=status_code, response=Json.dumps(response_data))
     

@@ -9,7 +9,7 @@ import ssl
 import extension as Extension
 
 from asyncio import CancelledError
-from user import *
+from datatypes import Device, Connection, User, Callback
 from pydoc import locate
 
 class Server:

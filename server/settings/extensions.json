@@ -2,7 +2,7 @@
     "extensions": [{
         "spotify": {
             "enabled": true,
-            "lib": "extensions.spotify"
+            "lib": "extensions.spotify.spotify"
         }
     }, {
         "leds": {

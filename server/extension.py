@@ -4,7 +4,7 @@ import inspect
 class Extension(object):
     def __init__(self, server: StreamServer):
         self.server: StreamServer = server
-        self.functions: map = {}
+        self.functions: map[str, function] = {}
 
     def register_function(self, function, args = None):
         self.functions[function.__name__] = { }
@@ -16,7 +16,7 @@ class Extension(object):
             self.functions[function.__name__]["arguments"] = { }
 
     def unregister_function(self, name: str):
-        self.functions.pop(name, None)
+        del self.functions[name]
 
     def get_functions(self):
         return list(self.functions.keys())
