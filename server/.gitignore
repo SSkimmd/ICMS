@@ -1,5 +1,5 @@
 venv
 __pycache__
 certificates
-/logs
+logs
 /extensions/spotify/credentials.json

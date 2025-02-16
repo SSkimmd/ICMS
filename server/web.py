@@ -5,10 +5,15 @@ import json as Json
 import sys
 import os
 import ssl
+import datetime
+
+import jwt.api_jwt
 import util
 import importlib
+import jwt
+import bcrypt
 
-
+from functools import wraps
 from extension import Extension
 from threading import Thread
 from flask import Flask, request
@@ -17,6 +22,47 @@ from datatypes import Device, Connection, User, Callback
 from flask_cors import CORS
 from stream import Server as StreamServer
 
+async def get_user_id(token: str = None):
+    logger = logging.getLogger("gunicorn.error")
+
+    if token is None:
+        return Response(status=400, response="ERROR: Authorization Header Is Missing")
+
+    user_id = None
+
+    try:
+        decoded = jwt.api_jwt.decode(token, "secret", algorithms=["HS256"])
+        user_id = decoded["user_id"]
+    except:
+        logger.error("ERROR: Incorrect Token Supplied")
+        return None
+    
+    if token is None:
+        logger.error("ERROR: Token Is None")
+        return None
+    
+    if user_id is None:
+        logger.error("ERROR: User ID Is None")
+        return None
+    
+    return user_id
+
+def requires_account(f):
+    @wraps(f)
+    async def decorated(*args, **kwargs):
+        token = request.headers.get("Authorization", None)
+
+        if token is None:
+            return Response(status=400, response="ERROR: Authorization Header Not Found")
+
+        user_id = await get_user_id(token)
+
+        if user_id is None:
+            return Response(status=400, response="ERROR: Failed To Authenticate User")
+
+        return await f(*args, user_id, **kwargs)
+    return decorated      
+
 class WebServer:
     def __init__(self):
         self.app = Flask(__name__)
@@ -24,6 +70,7 @@ class WebServer:
         self.server: StreamServer = None
 
         self.start_time = 0
+        self.users: list[User] = []
 
         CORS(self.app, resources={
             "/*": {
@@ -40,66 +87,129 @@ class WebServer:
         self.app.add_url_rule("/extension", view_func=self.get_extension, methods=["POST"])
         self.app.add_url_rule("/extensions", view_func=self.call_function, methods=["POST"])
         self.app.add_url_rule("/extensions", view_func=self.get_extension_config, methods=["GET"])
-        self.app.add_url_rule("/serverLog", view_func=self.server_log, methods=["POST"])
-        self.app.add_url_rule("/serverInfo", view_func=self.server_info, methods=["GET"])
+        self.app.add_url_rule("/server/log", view_func=self.server_log, methods=["POST"])
+        self.app.add_url_rule("/server/info", view_func=self.server_info, methods=["GET"])
         self.app.add_url_rule("/restart", view_func=self.restart, methods=["GET"])
         self.app.add_url_rule("/stop", view_func=self.stop, methods=["GET"])
         self.app.add_url_rule("/start", view_func=self.start, methods=["GET"])
 
     def init_extensions(self):
         with open("./settings/extensions.json") as file:
-            json = Json.loads(file.read())
+            json = Json.load(file)
 
-            if not "extensions" in json: return
+            for extension in json:
+                ex = json[extension]
 
-            for extension in json["extensions"]:
-                name = list(extension.keys())[0]
-
-                if "lib" not in extension[name] or "enabled" not in extension[name]: 
+                if "lib" not in ex or "enabled" not in ex: 
                     print("ERROR: Extension Multiple Key Error")
                     continue
                 
-                if not extension[name]["enabled"]:
-                    print(f'Skipping Extension: {name}')
+                if not ex["enabled"]:
+                    print(f'Skipping Extension: {extension}')
                     continue
 
-                lib = extension[name]["lib"]
+                lib = ex["lib"]
 
                 try:
                     if sys.modules.get(lib):
                         sys.modules.pop(lib)
-                        print(f'Reimporting: {name}')
+                        print(f'Reimporting: {extension}')
                     new_module = importlib.import_module(lib) 
                     new_extension: Extension = new_module.initialise(self.server)
-                    self.extensions[name] = new_extension
-                    print(f'Started Extension: {name}')
+                    self.extensions[extension] = new_extension
+                    print(f'Started Extension: {extension}')
                 except:
-                    print(f'Failed To Import Module Name: {name}')
+                    print(f'Failed To Import Module Name: {extension}')
                     continue
         return
     
+    async def get_user(self, user_id: int = None, credentials = None):
+        if user_id is not None:
+            for user in self.users:
+                if user.id == user_id:
+                    return user
+
+        if credentials is not None:
+            for user in self.users:
+                if user.username == credentials["username"]:
+                    if bcrypt.checkpw(credentials["password"], user.password):
+                        return user
+        
+        return None
+
     async def user_login(self):
+        data = request.get_json()
+
+        if "username" not in data:
+            return Response(status=400, response="ERROR: Key Error (username)")
+        
+        if "password" not in data:
+            return Response(status=400, response="ERROR: Key Error (password)")
 
 
+        password: str = data["password"]
 
-        return Response("", status=200)
+        credentials = {
+            "username": data["username"],
+            "password": password.encode()
+        }
+
+        user: User = await self.get_user(credentials=credentials)
+
+        if user is None:
+            return Response(status=400, response="ERROR: User Not Found")
+
+        return Response(status=200, response=Json.dumps({
+            "token": user.current_token
+        }), mimetype="application/json")
     
     async def user_register(self):
         data = request.get_json()
 
         if 'username' not in data:
-            return(400, 'ERROR: Key Error (username)')
+            return Response(status=400, response="ERROR: Key Error (username)")
         
         if 'password' not in data:
-            return(400, 'ERROR: Key Error (password)')
+            return Response(status=400, response="ERROR: Key Error (password)")
 
         username = data["username"]
-        user = User(username)
+        password = data["password"]
 
+        user_id = len(self.users)
+        user_token = None
 
-        return(200, f'SUCCESS: Registered {username}')
+        try:
+            user_token = jwt.api_jwt.encode(
+                {
+                    "user_id": user_id,
+                    "exp": datetime.datetime.now() + datetime.timedelta(days=30)
+                },
+                "secret",
+                algorithm="HS256"
+            )
+        except:
+            return Response(status=400, response="ERROR: Failed To Generate User Token")
+        
+        if user_token is None:
+            return Response(status=400, response="ERROR: Failed To Generate User Token")
+
+        
+        """
+            replace this with a database or load it from some external source
+        """
+        self.users.append(User(username, password, token=user_token, id=user_id))
+
+        return Response(status=200, response=Json.dumps({
+            "token": user_token
+        }), mimetype="application/json")
     
-    async def add_device(self):
+    @requires_account
+    async def add_device(self, user_id: int = None):
+        user: User = await self.get_user(user_id=user_id)
+
+        if user is None:
+            return Response(status=400, response="ERROR: User Is Not Authenticated")        
+        
         data = request.get_json()
         
         connection_name = data["connection_name"]
@@ -111,11 +221,22 @@ class WebServer:
         status_code = response[0]
         response_data = response[1]
 
-        return Response(status=status_code, response=Json.dumps({ "response": response_data }))
+        return Response(status=status_code, response=Json.dumps({ "response": response_data }), mimetype="application/json")
     
-    async def get_devices(self):
+    @requires_account
+    async def get_devices(self, user_id: int = None):
+        user: User = await self.get_user(user_id=user_id)
+
+        if user is None:
+            return Response(status=400, response="ERROR: User Is Not Authenticated")        
+
+
         devices = self.server.devices
         devices_response = {}
+
+        if devices is None:
+            return Response(400, response="ERROR: Device Error")
+
         for device in devices:
             connection: Connection = await self.server.get_connection(connection_name=device)
             
@@ -128,15 +249,27 @@ class WebServer:
                 "device_endpoints": connection.endpoints
             }
 
-        return Response(status=200, response=Json.dumps(devices_response))
+        return Response(status=200, response=Json.dumps(devices_response), mimetype="application/json")
     
-    async def call_device(self):
+    @requires_account
+    async def call_device(self, user_id: int = None):
+        user: User = await self.get_user(user_id=user_id)
+
+        if user is None:
+            return Response(status=400, response="ERROR: User Is Not Authenticated")        
+
         data = request.get_json()
         response = await self.server.call_device(data)
 
-        return Response(status=200, response=Json.dumps(response))
+        return Response(status=200, response=Json.dumps(response), mimetype="application/json")
     
-    async def get_connections(self):
+    @requires_account
+    async def get_connections(self, user_id: int = None):
+        user: User = await self.get_user(user_id=user_id)
+
+        if user is None:
+            return Response(status=400, response="ERROR: User Is Not Authenticated")        
+
         connections = self.server.connections
         connections_response = []
         for connection in connections:
@@ -146,9 +279,15 @@ class WebServer:
             name = connections[connection].connection_name
             connections_response.append(name)
 
-        return Response(status=200, response=Json.dumps(connections_response))
-    
-    async def get_extension(self):
+        return Response(status=200, response=Json.dumps(connections_response), mimetype="application/json")
+
+    @requires_account
+    async def get_extension(self, user_id: int = None):
+        user: User = await self.get_user(user_id=user_id)
+
+        if user is None:
+            return Response(status=400, response="ERROR: User Is Not Authenticated")        
+
         data = request.get_json()
 
         if "module" not in data:
@@ -163,9 +302,15 @@ class WebServer:
         if status_code == 400:
             self.server.logger.error(response_data)
 
-        return Response(status=status_code, response=Json.dumps(response_data))
+        return Response(status=status_code, response=Json.dumps(response_data), mimetype="application/json")
     
-    async def call_function(self):
+    @requires_account
+    async def call_function(self, user_id: int = None):
+        user: User = await self.get_user(user_id=user_id)
+
+        if user is None:
+            return Response(status=400, response="ERROR: User Is Not Authenticated")        
+
         data = request.get_json()
         response = await self.server.call_function(data)
 
@@ -175,26 +320,41 @@ class WebServer:
         if status_code == 400:
             self.server.logger.error(str(response_data))
 
-        return Response(status=status_code, response=Json.dumps(response_data))
+        return Response(status=status_code, response=Json.dumps(response_data), mimetype="application/json")
     
-    async def get_extension_config(self):
+    @requires_account
+    async def get_extension_config(self, user_id: int = None):
+        user: User = await self.get_user(user_id=user_id)
+
+        if user is None:
+            return Response(status=400, response="ERROR: User Is Not Authenticated")        
+
         extensions: dict[str, dict] = { }
         with open("settings/extensions.json") as file:
             json = Json.loads(file.read())
-            for extension in json["extensions"]:
-                name = list(extension.keys())[0]
-                extensions[name] = {
-                    "enabled": extension[name]["enabled"],
-                    "lib": extension[name]["lib"] 
+            for extension in json:
+                extensions[extension] = {
+                    "enabled": json[extension]["enabled"],
+                    "lib": json[extension]["lib"]
                 }
             
-        return Response(response=Json.dumps({ "extensions": extensions }), 
-        status=200, 
-        mimetype='application/json')   
+        return Response(status=200, response=Json.dumps({ "extensions": extensions }), mimetype="application/json")   
     
-    async def server_log(self):
-        data = request.get_json()
+    @requires_account
+    async def server_log(self, user_id: int = None):
+        user: User = await self.get_user(user_id=user_id)
+
+        if user is None:
+            return Response(status=400, response="ERROR: User Is Not Authenticated")
+
+        data = request.get_json()  
+
+        if "lines" not in data:
+            return Response(status=400, response="ERROR: Key Error (lines)")
+
         lines = int(data["lines"])
+
+
         out = ""
         log = util.reverse_readline("logs/log.txt")
         count = 0
@@ -208,7 +368,7 @@ class WebServer:
             out += line + "\n"
             count += 1
         return Response(response=out, status=200, mimetype='application/json')  
-       
+
     async def server_info(self):
         uptime = time.time() - self.start_time
 
@@ -225,11 +385,15 @@ class WebServer:
             mimetype='application/json'
         )
     
+    @requires_account
     def restart(self):
         return Response("Restarting...", 200)
+    
+    @requires_account
     def stop(self):
         asyncio.run(self.server.close())
         return Response("Stopping...", 200)   
+    
     def start(self):
         self.init_extensions()
         self.server = StreamServer(ssl_context=None)

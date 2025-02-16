@@ -1,4 +1,5 @@
 import asyncio
+import bcrypt
 
 
 class Callback:
@@ -29,8 +30,13 @@ class Device:
         self.device_type: str = device_type
 
 class User:
-    def __init__(self, username: str):
+    def __init__(self, username: str, password: str, token: str = "", id: int = -1):
+        self.id = id
         self.username: str = username
+        #hashed
+        self.password: str = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
+        self.current_token: str = token
+
         self.devices: dict[str, str] = {}
         
         self.pinned_extensions: list[str] = []

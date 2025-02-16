@@ -23,7 +23,7 @@ class Spotify(Extension):
             self.clientSecret = json["clientSecret"]
 
         scope = "user-read-currently-playing user-modify-playback-state"
-        self.sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope, client_id=self.clientID, client_secret=self.clientSecret, redirect_uri="https://0.0.0.0:8080/dashboard"))
+        self.sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope, client_id=self.clientID, client_secret=self.clientSecret, redirect_uri="https://0.0.0.0:8080/auth"))
 
         self.volume = 0
         self.register_function(self.change_volume, {
@@ -38,7 +38,7 @@ class Spotify(Extension):
             return "ERROR: Spotipy Failed To Intialise"
 
         song = self.sp.current_user_playing_track()['item']['name']
-        return song
+        return f"SUCCESS: Song Is: {song}"
         
         
     async def next_track(self):

@@ -12,6 +12,7 @@ from asyncio import CancelledError
 from datatypes import Device, Connection, User, Callback
 from pydoc import locate
 
+
 class Server:
     def __init__(self, ssl_context = None, extensions: map = None):
         self.connections: dict[int, Connection] = {}
@@ -157,7 +158,6 @@ class Server:
                     except:
                         return(400, f'ERROR: Argument Error: {argument} Has Incorrect Type')
 
-
             response = await extension.functions[function_name]["function"](**arguments)
 
             if response:
@@ -170,8 +170,12 @@ class Server:
         return (400, response)
     
     async def add_device(self, connection_name: str, device: Device):
-        self.devices[connection_name] = device
         connection: Connection = await self.get_connection(connection_name=connection_name)
+
+        if connection is None:
+            return(400, "ERROR: Failed To Get Connection")
+
+        self.devices[connection_name] = device
         connection.device = self.devices[connection_name]
 
         with open(os.getcwd() + "/settings/devices/" + connection_name + ".json", 'w') as device_config:
@@ -182,8 +186,22 @@ class Server:
             }
             Json.dump(config, device_config, indent=4)
         return (200, "SUCCESS: Added New Device")
-
+    
     async def process_request(self, request, connection: Connection = None):
+        """
+            Proccess and perform request based on the type attribute
+
+            Request Types
+
+            LOG: Log-out the message contained in the request, this is used by connected devices
+
+            POST: Similarly to the REST keyword, call a function with arguments
+
+            GET: Also similar to the REST keyword, get data from a function or endpoint
+
+            CONNECT: Used by client devices to connect to authenticate with the stream server
+        """
+
         if request is not None:
             #check if user is authorised
             #if connection is None: 
@@ -231,17 +249,17 @@ class Server:
 
             #==================================== GET =======================================================           
             if request["type"] == "GET":
-                if "extension" in request:
-                    response = await self.get_extensions(request["extension"])
-                    return response
-                
-                return (400, "ERROR: Key Error In GET Request")
+                if "extension" not in request:
+                    return (400, "ERROR: Key Error In GET Request")
+                    
+                response = await self.get_extensions(request["extension"])
+                return response
             #==================================== POST =======================================================
             if request["type"] == "POST":
                 response = await self.call_function(request)
                 return response
                    
-        return None
+        return "ERROR: Failed To Proccess Request"
 
     async def update(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
         peername = writer.get_extra_info('peername')

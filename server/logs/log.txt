@@ -2034,3 +2034,637 @@ KeyError: 'device'
 [INFO] [gunicorn.error]: Worker exiting (pid: 1513)
 [INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
 [INFO] [gunicorn.error]: Worker exiting (pid: 25)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[ERROR] [gunicorn.error]: ERROR: Argument Name Error
+[INFO] [gunicorn.error]: Worker exiting (pid: 62)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[ERROR] [gunicorn.error]: ERROR: Argument Name Error
+[INFO] [gunicorn.error]: Worker exiting (pid: 144)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[ERROR] [gunicorn.error]: ERROR: Argument Name Error
+[ERROR] [gunicorn.error]: ERROR: Argument Name Error
+[INFO] [gunicorn.error]: Worker exiting (pid: 222)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[ERROR] [gunicorn.error]: ERROR: Argument Name Error
+[INFO] [gunicorn.error]: Worker exiting (pid: 374)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[ERROR] [gunicorn.error]: ERROR: Argument Name Error
+[INFO] [gunicorn.error]: Worker exiting (pid: 452)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[ERROR] [gunicorn.error]: ERROR: Argument Name Error
+[ERROR] [gunicorn.error]: ERROR: Argument Name Error
+[INFO] [gunicorn.error]: Worker exiting (pid: 530)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[ERROR] [gunicorn.error]: ERROR: Argument Name Error
+[INFO] [gunicorn.error]: Worker exiting (pid: 539)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[ERROR] [gunicorn.error]: ERROR: Argument Name Error
+[INFO] [gunicorn.error]: Worker exiting (pid: 545)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[ERROR] [gunicorn.error]: ERROR: Argument Name Error
+[INFO] [gunicorn.error]: Worker exiting (pid: 551)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[ERROR] [gunicorn.error]: ERROR: Argument Name Error
+[INFO] [gunicorn.error]: Worker exiting (pid: 557)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[ERROR] [gunicorn.error]: ERROR: Argument Name Error
+[INFO] [gunicorn.error]: Worker exiting (pid: 563)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[ERROR] [gunicorn.error]: ERROR: Argument Name Error
+[INFO] [gunicorn.error]: Worker exiting (pid: 569)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[ERROR] [gunicorn.error]: ERROR: Argument Name Error
+[INFO] [gunicorn.error]: Worker exiting (pid: 575)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[ERROR] [gunicorn.error]: ERROR: Argument Name Error
+[INFO] [gunicorn.error]: Worker exiting (pid: 581)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[ERROR] [gunicorn.error]: ERROR: Argument Name Error
+[ERROR] [gunicorn.error]: ERROR: Argument Name Error
+[INFO] [gunicorn.error]: Worker exiting (pid: 657)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 664)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 670)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 677)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 682)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 760)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 767)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 843)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 848)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 62)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 77)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 92)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 97)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 102)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 107)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 112)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 117)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 122)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 147)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 152)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 157)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 162)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 141)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 146)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 155)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('127.0.0.1', 52002)
+[INFO] [gunicorn.error]: JSONDecodeError('Expecting value: line 1 column 1 (char 0)')
+[INFO] [gunicorn.error]: Connection From ('127.0.0.1', 52032)
+[INFO] [gunicorn.error]: JSONDecodeError('Expecting value: line 1 column 1 (char 0)')
+[INFO] [gunicorn.error]: Worker exiting (pid: 160)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('127.0.0.1', 52073)
+[INFO] [gunicorn.error]: JSONDecodeError('Expecting value: line 1 column 1 (char 0)')
+[INFO] [gunicorn.error]: Worker exiting (pid: 165)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Connection From ('127.0.0.1', 52137)
+[INFO] [gunicorn.error]: JSONDecodeError('Expecting value: line 1 column 1 (char 0)')
+[INFO] [gunicorn.error]: Worker exiting (pid: 170)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[2025-02-15 16:37:11,390] ERROR in app: Exception on /devices [GET]
+Traceback (most recent call last):
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 939, in finalize_request
+    response = self.make_response(rv)
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1249, in make_response
+    raise TypeError(
+TypeError: The view function did not return a valid response. The return type must be a string, dict, list, tuple with headers or status, Response instance, or WSGI callable, but it was a coroutine.
+[INFO] [gunicorn.error]: Worker exiting (pid: 175)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 180)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[2025-02-15 16:41:36,749] ERROR in app: Exception on /devices [GET]
+Traceback (most recent call last):
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 939, in finalize_request
+    response = self.make_response(rv)
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1249, in make_response
+    raise TypeError(
+TypeError: The view function did not return a valid response. The return type must be a string, dict, list, tuple with headers or status, Response instance, or WSGI callable, but it was a coroutine.
+[INFO] [gunicorn.error]: Worker exiting (pid: 185)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[2025-02-15 16:41:57,265] ERROR in app: Exception on /devices [GET]
+Traceback (most recent call last):
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 939, in finalize_request
+    response = self.make_response(rv)
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1212, in make_response
+    raise TypeError(
+TypeError: The view function for 'get_devices' did not return a valid response. The function either returned None or ended without a return statement.
+[INFO] [gunicorn.error]: Worker exiting (pid: 190)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[2025-02-15 16:42:15,895] ERROR in app: Exception on /devices [GET]
+Traceback (most recent call last):
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 939, in finalize_request
+    response = self.make_response(rv)
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1249, in make_response
+    raise TypeError(
+TypeError: The view function did not return a valid response. The return type must be a string, dict, list, tuple with headers or status, Response instance, or WSGI callable, but it was a coroutine.
+[INFO] [gunicorn.error]: Worker exiting (pid: 195)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 64)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 69)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 45)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 50)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[2025-02-16 18:09:29,677] ERROR in app: Exception on /serverLog [POST]
+Traceback (most recent call last):
+  File "/home/tom/.local/lib/python3.12/site-packages/jwt/api_jws.py", line 269, in _load
+    signing_input, crypto_segment = jwt.rsplit(b".", 1)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 2, got 1)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 254, in __call__
+    return call_result.result()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 331, in main_wrap
+    result = await self.awaitable(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/web.py", line 29, in decorated
+    decoded = jwt.api_jwt.decode(token, "secret", algorithms=["HS256"])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/jwt/api_jwt.py", line 222, in decode
+    decoded = self.decode_complete(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/jwt/api_jwt.py", line 156, in decode_complete
+    decoded = api_jws.decode_complete(
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/jwt/api_jws.py", line 209, in decode_complete
+    payload, signing_input, header, signature = self._load(jwt)
+                                                ^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/jwt/api_jws.py", line 272, in _load
+    raise DecodeError("Not enough segments") from err
+jwt.exceptions.DecodeError: Not enough segments
+[INFO] [gunicorn.error]: Worker exiting (pid: 56)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 62)
+[INFO] [gunicorn.error]: Worker exiting (pid: 68)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 73)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 78)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 94)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 99)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 124)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 129)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 135)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 141)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 147)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 153)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 159)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 165)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[ERROR] [gunicorn.error]: ERROR: Incorrect Token Supplied
+[ERROR] [gunicorn.error]: ERROR: Incorrect Token Supplied
+[INFO] [gunicorn.error]: Worker exiting (pid: 173)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 180)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[2025-02-16 20:24:12,322] ERROR in app: Exception on /register [POST]
+Traceback (most recent call last):
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 939, in finalize_request
+    response = self.make_response(rv)
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1249, in make_response
+    raise TypeError(
+TypeError: The view function did not return a valid response. The return type must be a string, dict, list, tuple with headers or status, Response instance, or WSGI callable, but it was a int.
+[INFO] [gunicorn.error]: Worker exiting (pid: 185)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[2025-02-16 20:24:56,540] ERROR in app: Exception on /register [POST]
+Traceback (most recent call last):
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 939, in finalize_request
+    response = self.make_response(rv)
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1249, in make_response
+    raise TypeError(
+TypeError: The view function did not return a valid response. The return type must be a string, dict, list, tuple with headers or status, Response instance, or WSGI callable, but it was a int.
+[INFO] [gunicorn.error]: Worker exiting (pid: 191)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[2025-02-16 20:25:29,707] ERROR in app: Exception on /register [POST]
+Traceback (most recent call last):
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 254, in __call__
+    return call_result.result()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 331, in main_wrap
+    result = await self.awaitable(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/web.py", line 124, in user_register
+    username = data["username"]
+               ~~~~^^^^^^^^^^^^
+KeyError: 'username'
+[INFO] [gunicorn.error]: Worker exiting (pid: 197)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 203)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[2025-02-16 20:33:08,138] ERROR in app: Exception on /register [POST]
+Traceback (most recent call last):
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 254, in __call__
+    return call_result.result()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 331, in main_wrap
+    result = await self.awaitable(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/web.py", line 149, in user_register
+    self.users.append(User(username), token=user_token, id=user_id)
+TypeError: list.append() takes no keyword arguments
+[INFO] [gunicorn.error]: Worker exiting (pid: 210)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[ERROR] [gunicorn.error]: ERROR: Incorrect Token Supplied
+[INFO] [gunicorn.error]: Worker exiting (pid: 218)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 229)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[2025-02-16 21:07:01,586] ERROR in app: Exception on /register [POST]
+Traceback (most recent call last):
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 254, in __call__
+    return call_result.result()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 331, in main_wrap
+    result = await self.awaitable(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/web.py", line 188, in user_register
+    self.users.append(User(username, token=user_token, id=user_id))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: User.__init__() missing 1 required positional argument: 'password'
+[INFO] [gunicorn.error]: Worker exiting (pid: 257)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[2025-02-16 21:07:28,167] ERROR in app: Exception on /register [POST]
+Traceback (most recent call last):
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 254, in __call__
+    return call_result.result()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 331, in main_wrap
+    result = await self.awaitable(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/web.py", line 188, in user_register
+    self.users.append(User(username, password, token=user_token, id=user_id))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/datatypes.py", line 37, in __init__
+    self.password: str = bcrypt.hashpw(bytes(password), bcrypt.gensalt())
+                                       ^^^^^^^^^^^^^^^
+TypeError: string argument without an encoding
+[INFO] [gunicorn.error]: Worker exiting (pid: 263)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[2025-02-16 21:08:16,419] ERROR in app: Exception on /login [POST]
+Traceback (most recent call last):
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 254, in __call__
+    return call_result.result()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 331, in main_wrap
+    result = await self.awaitable(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/web.py", line 146, in user_login
+    "password": bytes(password)
+                ^^^^^^^^^^^^^^^
+TypeError: string argument without an encoding
+[INFO] [gunicorn.error]: Worker exiting (pid: 269)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 277)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[ERROR] [gunicorn.error]: ERROR: Incorrect Token Supplied
+[ERROR] [gunicorn.error]: ERROR: Incorrect Token Supplied
+[INFO] [gunicorn.error]: Worker exiting (pid: 287)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[ERROR] [gunicorn.error]: ERROR: Incorrect Token Supplied
+[ERROR] [gunicorn.error]: ERROR: Incorrect Token Supplied
+[INFO] [gunicorn.error]: Worker exiting (pid: 297)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[ERROR] [gunicorn.error]: ERROR: Incorrect Token Supplied
+[ERROR] [gunicorn.error]: ERROR: Incorrect Token Supplied
+[ERROR] [gunicorn.error]: ERROR: Incorrect Token Supplied
+[INFO] [gunicorn.error]: Worker exiting (pid: 304)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[ERROR] [gunicorn.error]: ERROR: Incorrect Token Supplied
+[INFO] [gunicorn.error]: Worker exiting (pid: 315)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[ERROR] [gunicorn.error]: ERROR: Incorrect Token Supplied
+[INFO] [gunicorn.error]: Worker exiting (pid: 321)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[ERROR] [gunicorn.error]: ERROR: Incorrect Token Supplied
+[INFO] [gunicorn.error]: Worker exiting (pid: 327)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 340)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 350)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[2025-02-16 22:02:02,393] ERROR in app: Exception on /extensions [GET]
+Traceback (most recent call last):
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 254, in __call__
+    return call_result.result()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 331, in main_wrap
+    result = await self.awaitable(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/web.py", line 63, in decorated
+    return await f(*args, user_id, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/web.py", line 295, in get_extension_config
+    for extension in json["extensions"]:
+                     ~~~~^^^^^^^^^^^^^^
+KeyError: 'extensions'
+[INFO] [gunicorn.error]: Worker exiting (pid: 363)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[2025-02-16 22:02:35,912] ERROR in app: Exception on /extensions [GET]
+Traceback (most recent call last):
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 254, in __call__
+    return call_result.result()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 331, in main_wrap
+    result = await self.awaitable(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/web.py", line 63, in decorated
+    return await f(*args, user_id, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/web.py", line 296, in get_extension_config
+    name = list(extension.keys())[0]
+                ^^^^^^^^^^^^^^
+AttributeError: 'str' object has no attribute 'keys'
+[INFO] [gunicorn.error]: Worker exiting (pid: 373)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[2025-02-16 22:02:55,931] ERROR in app: Exception on /extensions [GET]
+Traceback (most recent call last):
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 254, in __call__
+    return call_result.result()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 331, in main_wrap
+    result = await self.awaitable(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/web.py", line 63, in decorated
+    return await f(*args, user_id, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/web.py", line 298, in get_extension_config
+    "enabled": extension[name]["enabled"],
+               ~~~~~~~~~^^^^^^
+TypeError: string indices must be integers, not 'dict'
+[INFO] [gunicorn.error]: Worker exiting (pid: 379)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 385)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 394)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 400)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 408)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 414)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 420)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 429)

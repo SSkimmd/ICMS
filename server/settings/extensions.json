@@ -1,18 +1,14 @@
 {
-    "extensions": [{
-        "spotify": {
-            "enabled": true,
-            "lib": "extensions.spotify.spotify"
-        }
-    }, {
-        "leds": {
-            "enabled": true,
-            "lib": "extensions.leds"
-        }
-    }, {
-        "test": {
-            "enabled": true,
-            "lib": "extensions.test"
-        }
-    }]
+    "spotify": {
+        "enabled": true,
+        "lib": "extensions.spotify.spotify"
+    },
+    "leds": {
+        "enabled": true,
+        "lib": "extensions.leds"
+    },
+    "test": {
+        "enabled": true,
+        "lib": "extensions.test"
+    }
 }
