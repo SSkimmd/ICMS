@@ -18,16 +18,17 @@ class StoreServer:
         self.app = Flask(__name__)
 
         self.app.add_url_rule("/extensions/<extension>", view_func=self.download_extension, methods=["GET"])
-        self.app.add_url_rule("/upload", view_func=self.upload_extension, methods=["POST"])
+        self.app.add_url_rule("/extensions/upload", view_func=self.upload_extension, methods=["POST"])
+        self.app.add_url_rule("/extensions", view_func=self.get_extensions, methods=["GET"])
+
+        self.app.add_url_rule("/devices/<device>", view_func=None)
+        self.app.add_url_rule("/devices/upload", view_func=None)
+        self.app.add_url_rule("/devices", view_func=None)
 
     async def download_extension(self, extension):
-
-
         pass
 
     async def get_extensions(self):
-        
-        
         pass
 
     async def upload_extension(self):

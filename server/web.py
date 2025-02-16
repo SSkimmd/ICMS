@@ -45,23 +45,7 @@ async def get_user_id(token: str = None):
         logger.error("ERROR: User ID Is None")
         return None
     
-    return user_id
-
-def requires_account(f):
-    @wraps(f)
-    async def decorated(*args, **kwargs):
-        token = request.headers.get("Authorization", None)
-
-        if token is None:
-            return Response(status=400, response="ERROR: Authorization Header Not Found")
-
-        user_id = await get_user_id(token)
-
-        if user_id is None:
-            return Response(status=400, response="ERROR: Failed To Authenticate User")
-
-        return await f(*args, user_id, **kwargs)
-    return decorated      
+    return user_id  
 
 class WebServer:
     def __init__(self):
@@ -123,6 +107,26 @@ class WebServer:
                     continue
         return
     
+    def requires_account(f):
+        @wraps(f)
+        async def decorated(self, *args, **kwargs):
+            token = request.headers.get("Authorization", None)
+
+            if token is None:
+                return Response(status=400, response="ERROR: Authorization Header Not Found")
+
+            user_id = await get_user_id(token)
+            user: User = await self.get_user(user_id=user_id)
+
+            if user is None:
+                return Response(status=400, response="ERROR: User Not Found")
+
+            if token != user.current_token:
+                return Response(status=400, response="ERROR: Incorrect Token")
+
+            return await f(self, *args, user, **kwargs)
+        return decorated    
+
     async def get_user(self, user_id: int = None, credentials = None):
         if user_id is not None:
             for user in self.users:
@@ -159,9 +163,7 @@ class WebServer:
         if user is None:
             return Response(status=400, response="ERROR: User Not Found")
 
-        return Response(status=200, response=Json.dumps({
-            "token": user.current_token
-        }), mimetype="application/json")
+        return Response(status=200, response=Json.dumps({ "token": user.current_token }), mimetype="application/json")
     
     async def user_register(self):
         data = request.get_json()
@@ -204,12 +206,7 @@ class WebServer:
         }), mimetype="application/json")
     
     @requires_account
-    async def add_device(self, user_id: int = None):
-        user: User = await self.get_user(user_id=user_id)
-
-        if user is None:
-            return Response(status=400, response="ERROR: User Is Not Authenticated")        
-        
+    async def add_device(self, user: User = None):   
         data = request.get_json()
         
         connection_name = data["connection_name"]
@@ -224,13 +221,7 @@ class WebServer:
         return Response(status=status_code, response=Json.dumps({ "response": response_data }), mimetype="application/json")
     
     @requires_account
-    async def get_devices(self, user_id: int = None):
-        user: User = await self.get_user(user_id=user_id)
-
-        if user is None:
-            return Response(status=400, response="ERROR: User Is Not Authenticated")        
-
-
+    async def get_devices(self, user: User = None):
         devices = self.server.devices
         devices_response = {}
 
@@ -252,23 +243,14 @@ class WebServer:
         return Response(status=200, response=Json.dumps(devices_response), mimetype="application/json")
     
     @requires_account
-    async def call_device(self, user_id: int = None):
-        user: User = await self.get_user(user_id=user_id)
-
-        if user is None:
-            return Response(status=400, response="ERROR: User Is Not Authenticated")        
-
+    async def call_device(self, user: User = None):
         data = request.get_json()
         response = await self.server.call_device(data)
 
         return Response(status=200, response=Json.dumps(response), mimetype="application/json")
     
     @requires_account
-    async def get_connections(self, user_id: int = None):
-        user: User = await self.get_user(user_id=user_id)
-
-        if user is None:
-            return Response(status=400, response="ERROR: User Is Not Authenticated")        
+    async def get_connections(self, user: User = None): 
 
         connections = self.server.connections
         connections_response = []
@@ -282,12 +264,7 @@ class WebServer:
         return Response(status=200, response=Json.dumps(connections_response), mimetype="application/json")
 
     @requires_account
-    async def get_extension(self, user_id: int = None):
-        user: User = await self.get_user(user_id=user_id)
-
-        if user is None:
-            return Response(status=400, response="ERROR: User Is Not Authenticated")        
-
+    async def get_extension(self, user: User = None):
         data = request.get_json()
 
         if "module" not in data:
@@ -305,12 +282,7 @@ class WebServer:
         return Response(status=status_code, response=Json.dumps(response_data), mimetype="application/json")
     
     @requires_account
-    async def call_function(self, user_id: int = None):
-        user: User = await self.get_user(user_id=user_id)
-
-        if user is None:
-            return Response(status=400, response="ERROR: User Is Not Authenticated")        
-
+    async def call_function(self, user: User = None):
         data = request.get_json()
         response = await self.server.call_function(data)
 
@@ -323,12 +295,7 @@ class WebServer:
         return Response(status=status_code, response=Json.dumps(response_data), mimetype="application/json")
     
     @requires_account
-    async def get_extension_config(self, user_id: int = None):
-        user: User = await self.get_user(user_id=user_id)
-
-        if user is None:
-            return Response(status=400, response="ERROR: User Is Not Authenticated")        
-
+    async def get_extension_config(self, user: User = None):
         extensions: dict[str, dict] = { }
         with open("settings/extensions.json") as file:
             json = Json.loads(file.read())
@@ -341,12 +308,7 @@ class WebServer:
         return Response(status=200, response=Json.dumps({ "extensions": extensions }), mimetype="application/json")   
     
     @requires_account
-    async def server_log(self, user_id: int = None):
-        user: User = await self.get_user(user_id=user_id)
-
-        if user is None:
-            return Response(status=400, response="ERROR: User Is Not Authenticated")
-
+    async def server_log(self, user: User = None):
         data = request.get_json()  
 
         if "lines" not in data:

@@ -2668,3 +2668,128 @@ TypeError: string indices must be integers, not 'dict'
 [INFO] [gunicorn.error]: Worker exiting (pid: 420)
 [INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
 [INFO] [gunicorn.error]: Worker exiting (pid: 429)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 25)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 30)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 35)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 40)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 46)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 55)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 60)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[2025-02-16 22:46:27,594] ERROR in app: Exception on /extensions [GET]
+Traceback (most recent call last):
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 254, in __call__
+    return call_result.result()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 331, in main_wrap
+    result = await self.awaitable(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/web.py", line 121, in decorated
+    if token != user.current_token:
+                ^^^^^^^^^^^^^^^^^^
+AttributeError: 'coroutine' object has no attribute 'current_token'
+[INFO] [gunicorn.error]: Worker exiting (pid: 72)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[2025-02-16 22:46:41,780] ERROR in app: Exception on /extensions [GET]
+Traceback (most recent call last):
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 254, in __call__
+    return call_result.result()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 331, in main_wrap
+    result = await self.awaitable(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/web.py", line 121, in decorated
+    if token != user.current_token:
+                ^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'current_token'
+[INFO] [gunicorn.error]: Worker exiting (pid: 79)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 85)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 91)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[2025-02-16 22:48:46,085] ERROR in app: Exception on /extensions [GET]
+Traceback (most recent call last):
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 254, in __call__
+    return call_result.result()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/tom/.local/lib/python3.12/site-packages/asgiref/sync.py", line 331, in main_wrap
+    result = await self.awaitable(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/web.py", line 127, in decorated
+    return await f(self, *args, user, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/jimmy/Desktop/COMP3000/server/web.py", line 329, in get_extension_config
+    user: User = await self.get_user(user_id=user_id)
+                                             ^^^^^^^
+NameError: name 'user_id' is not defined
+[INFO] [gunicorn.error]: Worker exiting (pid: 100)
+[INFO] [gunicorn.error]: Stream Server Listening at: 0.0.0.0:8080
+[INFO] [gunicorn.error]: Worker exiting (pid: 108)

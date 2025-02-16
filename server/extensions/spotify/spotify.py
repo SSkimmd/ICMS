@@ -10,7 +10,7 @@ from spotipy.oauth2 import SpotifyOAuth
 class Spotify(Extension):
     def __init__(self, server):
         super().__init__(server)
-        
+
         self.clientID = ""
         self.clientSecret = ""
         self.sp = None
