@@ -32,7 +32,6 @@ def reverse_readline(filename, buf_size=8192):
         if segment is not None:
             yield segment.decode()
 
-
 class NoColourFormatter(logging.Formatter):
     """Log formatter that strips terminal colour escape codes from the log message."""
     ANSI_RE = re.compile(r"\x1b\[[0-9;]*m")

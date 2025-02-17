@@ -4,3 +4,4 @@ certificates
 logs
 /extensions/spotify/credentials.json
 .cache
+/settings/users.json

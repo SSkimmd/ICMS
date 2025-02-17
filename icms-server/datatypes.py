@@ -33,15 +33,14 @@ class User:
     def __init__(self, username: str, password: str, token: str = "", id: int = -1):
         self.id = id
         self.username: str = username
+        
         #hashed
-        self.password: str = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
+        self.password: str = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
         self.current_token: str = token
 
         self.devices: dict[str, str] = {}
         
         self.pinned_extensions: list[str] = []
 
-        self.allow_guest_connections: bool = False
         self.is_admin: bool = False
-
         self.roles: list[str] = []

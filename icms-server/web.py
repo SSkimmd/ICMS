@@ -56,6 +56,8 @@ class WebServer:
         self.start_time = 0
         self.users: list[User] = []
 
+        self.logger = logging.getLogger("gunicorn.error")
+
         CORS(self.app, resources={
             "/*": {
                 "origins": "*"
@@ -131,20 +133,90 @@ class WebServer:
         return decorated    
 
     async def get_user(self, user_id: int = None, credentials = None):
+        """
+            Seperate These Into Different Functions its ugly
+        """
+
         if user_id is not None:
             for user in self.users:
                 if user.id == user_id:
                     return user
+                
+            #find user in file if not found in cache
+            with open("./settings/users.json") as file:
+                users = Json.loads(file.read())
+
+                for user in users:
+                    if users[user]['id'] == user_id:
+                        self.logger.info(f'INFO: User Loaded From File: {user}')
+
+                        usr: User = User(
+                            user, 
+                            users[user]['password'], 
+                            users[user]['current_token'], 
+                            users[user]['id']
+                        )
+                        
+                        usr.is_admin = users[user]['is_admin']
+                        usr.devices = users[user]['devices']
+                        usr.pinned_extensions = users[user]['pinned_extensions']
+                        usr.roles = users[user]['roles']
+
+                        self.users.append(usr)
+                        return usr 
 
         if credentials is not None:
-            for user in self.users:
-                if user.username == credentials["username"]:
-                    if bcrypt.checkpw(credentials["password"], user.password):
-                        return user
-        
+            with open("settings/users.json") as file:
+                users = Json.loads(file.read())
+
+                if credentials['username'] not in users:
+                    return None
+
+                user = users[credentials['username']]
+                user_password: str = user['password']
+
+                if bcrypt.checkpw(credentials['password'], user_password.encode()):
+                    usr: User = User(
+                        credentials['username'], 
+                        user['password'], 
+                        user['current_token'], 
+                        user['id']
+                    )
+                    
+                    usr.is_admin = user['is_admin']
+                    usr.devices = user['devices']
+                    usr.pinned_extensions = user['pinned_extensions']
+                    usr.roles = user['roles']
+                    return usr          
         return None
+    
+    async def create_user(self, user: User):
+        users = None
+        with open("./settings/users.json", 'r') as file:
+            users = Json.loads(file.read())
+
+        if user.username in users:
+            return False
+
+        with open("./settings/users.json", 'w') as file:
+            users[user.username] = {
+                "id": user.id,
+                "password": user.password,
+                "current_token": user.current_token,
+                "devices": user.devices,
+                "pinned_extensions": user.pinned_extensions,
+                "is_admin": user.is_admin,
+                "roles": user.roles                
+            }
+
+            Json.dump(users, file, indent=4)
+        return True
 
     async def user_login(self):
+        """
+            Make This Look Nicer
+        """
+
         data = request.get_json()
 
         if "username" not in data:
@@ -161,10 +233,23 @@ class WebServer:
             "password": password.encode()
         }
 
+        for current_user in self.users:
+            if current_user.username == data['username']:
+                return Response(status=200, response=Json.dumps({ "token": current_user.current_token }), mimetype="application/json")
+
         user: User = await self.get_user(credentials=credentials)
+
+        try:
+            decoded = jwt.api_jwt.decode(user.current_token, "secret", algorithms=["HS256"])
+        except:
+            self.logger.error("ERROR: Incorrect Token Supplied (Login)")
+            return Response(status=400, response="ERROR: Incorrect Token Supplied")
 
         if user is None:
             return Response(status=400, response="ERROR: User Not Found")
+        
+        self.logger.info(f'SUCCESS: User Logged In: {user.username}')
+        self.users.append(user)
 
         return Response(status=200, response=Json.dumps({ "token": user.current_token }), mimetype="application/json")
     
@@ -198,11 +283,14 @@ class WebServer:
         if user_token is None:
             return Response(status=400, response="ERROR: Failed To Generate User Token")
 
-        
-        """
-            replace this with a database or load it from some external source
-        """
-        self.users.append(User(username, password, token=user_token, id=user_id))
+
+        user: User = User(username, password, token=user_token, id=user_id)
+        created = await self.create_user(user)
+
+        if not created:
+            return Response(status=400, response="ERROR: Failed To Create User")
+
+        self.users.append(user)
 
         return Response(status=200, response=Json.dumps({
             "token": user_token
