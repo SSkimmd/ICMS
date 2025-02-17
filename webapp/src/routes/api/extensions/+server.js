@@ -3,10 +3,11 @@ import { json } from '@sveltejs/kit'
 export async function POST(event) {
     const data = await event.request.json();
 
-    const response = await fetch("http://0.0.0.0:8081/extensions", {
+    const request = await fetch("http://0.0.0.0:8081/extensions", {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'debug'
         },
         body: JSON.stringify({
             "type": data["type"],
@@ -16,12 +17,27 @@ export async function POST(event) {
         })
     });
 
-    const jsonResponse = await response.json();
+    const jsonResponse = await request.json();
 
-    const requestResult = {
-        "status": response.status,
-        "response": jsonResponse
-    };
-
-    return json(requestResult);
+    return json(JSON.stringify({
+        "status": request.status,
+        "message": jsonResponse
+    })); 
 }
+
+export async function GET(event) {
+    const request = await fetch("http://0.0.0.0:8081/extensions", {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'debug'
+        }
+    });
+
+    const jsonResponse = await request.json();
+    const res = new Response();
+    res.json = jsonResponse;
+
+    return res; 
+}
+

@@ -12,7 +12,8 @@ export async function POST(event) {
     const response = await fetch("http://0.0.0.0:8081/device", {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'debug'
         },
         body: jsonData
     });

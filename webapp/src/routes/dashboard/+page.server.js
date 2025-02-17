@@ -1,19 +1,8 @@
-export const load = async () => {
-    try {
-        const response = await fetch("http://0.0.0.0:8081/server/info", {
-            signal: AbortSignal.timeout(3000),
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        const data = await response.json();
-        return { ...data }
-    } catch {
-        return { }
-    }
+export const load = async ({ fetch }) => {
+    const response = await fetch("/api/server/info");
+    const data = response.json;
+    return { ...data }
 }
-
 
 export const actions = {
     start: async(event) => {

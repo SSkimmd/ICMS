@@ -9,7 +9,7 @@
     async function RefreshServerLog() {
         if(showLinesValue == "") return;
 
-        const response = await fetch("/api/serverlog", {
+        const response = await fetch("/api/server/log", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

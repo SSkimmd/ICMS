@@ -1,20 +1,14 @@
-export const load = async () => {
+export const load = async ({ fetch }) => {
     try {
-        var response = await fetch("http://0.0.0.0:8081/server/info", {
-            signal: AbortSignal.timeout(3000),
-            method: 'GET'
-        });
+        var server_info_response = await fetch("/api/server/info");
+        const server_info = { ...server_info_response.json }
 
-        const server_info = await response.json();
         if(!server_info["server_running"]) { return { "server_down": true } }
 
-        var response = await fetch("http://0.0.0.0:8081/extensions", {
-            signal: AbortSignal.timeout(3000),
-            method: 'GET'
-        });
-        
-        const data = await response.json();
-        return { ...data["extensions"] }
+        var extension_response = await fetch("/api/extensions");
+        const extensions = { ...extension_response.json }
+
+        return { ...extensions["extensions"] }
     } catch {
         return { 'server_down': true };
     }

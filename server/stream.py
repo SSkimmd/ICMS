@@ -131,9 +131,12 @@ class Server:
         if "module" not in request and "function" not in request and "arguments" not in request: 
             return (400, 'ERROR: Multiple Key Errors')
 
+        if "module" not in request:
+            return (400, 'ERROR: Key Error (module)')
+
         extension_name = request["module"]
         if extension_name not in self.extensions: 
-            return (400, 'ERROR: Key Error (module)')
+            return (400, 'ERROR: Module Not Found')
 
         function_name = request["function"]
         extension: Extension.Extension = self.extensions[extension_name]

@@ -1,29 +1,21 @@
-export const load = async ({ params }) => {
+export const load = async ({ params, fetch }) => {
     try {
-        var response = await fetch("http://0.0.0.0:8081/server/info", {
-            signal: AbortSignal.timeout(3000),
-            method: 'GET'
-        });
+        var server_info_response = await fetch("/api/server/info");
+        const server_info = { ...server_info_response.json }
 
-        const server_info = await response.json();
-        if(!server_info["server_running"]) { return; }
+        if(!server_info["server_running"]) { return { "server_down": true } }
 
-        let extension_name = params["extension"];
-
-        var response = await fetch("http://0.0.0.0:8081/extension", {
-            signal: AbortSignal.timeout(3000),
+        const extension_name = params["extension"];
+        const extension_request = await fetch("/api/extension", { 
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
             body: JSON.stringify({
                 "type": "GET",
                 "module": "all"
             })
-        });
-        const data = await response.json();
-        data[extension_name]["extension"] = extension_name;
-        return { ...data[extension_name] }
+        })
+
+        const data = { ...extension_request.json };
+        return { ...data[extension_name], "name": extension_name }
     } catch { 
         return {}
     }

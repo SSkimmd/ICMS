@@ -1,15 +1,11 @@
-export const load = async () => {
-
+export const load = async ({ fetch }) => {
     try {
-        var response = await fetch("http://0.0.0.0:8081/server/info", {
-            signal: AbortSignal.timeout(3000),
-            method: 'GET'
-        });
+        var server_info_response = await fetch("/api/server/info");
+        const server_info = { ...server_info_response.json }
 
-        const server_info = await response.json();
         if(!server_info["server_running"]) { return { "server_down": true } }
 
-        var device_response = await fetch("http://0.0.0.0:8081/devices", {
+        var device_response = await fetch("/api/devices", {
             signal: AbortSignal.timeout(3000),
             method: 'GET',
             headers: {
@@ -19,7 +15,7 @@ export const load = async () => {
 
         const devices = await device_response.json();
         
-        var connection_response = await fetch("http://0.0.0.0:8081/connections", {
+        var connection_response = await fetch("/api/connections", {
             signal: AbortSignal.timeout(3000),
             method: 'GET',
             headers: {

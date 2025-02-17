@@ -29,21 +29,20 @@
 
         CurrentFunctionArguments = JsonCurrentFunctionArguments.replace(/\s+/g, "");
         
-        const response = await fetch("/api/extensions", {
+        let response = await fetch("/api/extensions", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 "type": "POST",
-                "module": data["extension"],
+                "module": data["name"],
                 "function": CurrentFunction["function"],
                 "arguments": JSON.parse(CurrentFunctionArguments)
             })
         })
-
-        const jsonResponse = await response.json();
-        requestResult = jsonResponse;
+        const response_data = JSON.parse(await response.json());
+        requestResult = response_data;
     }
 
     export let data;
@@ -65,7 +64,7 @@
         </div>
         {#if requestResult != ""}
             <p>{requestResult["status"]}</p>
-            <p>{requestResult["response"]}</p>
+            <p>{requestResult["message"]}</p>
         {/if}
         {/if}
     </div>
@@ -76,7 +75,7 @@
 </body>
 
 <div class="sm:pl-60 pr-20 pt-20 min-h-screen flex flex-col">
-    <p class="text-6xl pb-12">Extension: {data["extension"]}</p>
+    <p class="text-6xl pb-12">Extension: {data["name"]}</p>
     <div class="grid grid-flow-row sm:grid-cols-1 2xl:grid-cols-3 xl:grid-cols-2 md:grid-cols-1 space-y-4">
     {#if Object.keys(data).length > 0}
         {#each data["functions"] as func}

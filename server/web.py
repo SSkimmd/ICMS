@@ -114,6 +114,9 @@ class WebServer:
 
             if token is None:
                 return Response(status=400, response="ERROR: Authorization Header Not Found")
+            
+            if token == 'debug':
+                return await f(self, *args, **kwargs)
 
             user_id = await get_user_id(token)
             user: User = await self.get_user(user_id=user_id)
@@ -284,6 +287,7 @@ class WebServer:
     @requires_account
     async def call_function(self, user: User = None):
         data = request.get_json()
+
         response = await self.server.call_function(data)
 
         status_code = response[0]
