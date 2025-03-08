@@ -121,7 +121,7 @@ class WebServer:
                 return await f(self, *args, **kwargs)
 
             user_id = await get_user_id(token)
-            user: User = await self.get_user(user_id=user_id)
+            user: User = await self.get_user_by_id(user_id=user_id)
 
             if user is None:
                 return Response(status=400, response="ERROR: User Not Found")
@@ -132,64 +132,53 @@ class WebServer:
             return await f(self, *args, user, **kwargs)
         return decorated    
 
-    async def get_user(self, user_id: int = None, credentials = None):
-        """
-            Seperate These Into Different Functions its ugly
-        """
+    async def get_user_by_id(self, user_id: int):
+        for user in self.users:
+            if user.id == user_id:
+                return user
 
-        if user_id is not None:
-            for user in self.users:
-                if user.id == user_id:
-                    return user
-                
-            #find user in file if not found in cache
-            with open("./settings/users.json") as file:
-                users = Json.loads(file.read())
+        user = await self.get_user_from_file(user_id)
+        return user
 
-                for user in users:
-                    if users[user]['id'] == user_id:
-                        self.logger.info(f'INFO: User Loaded From File: {user}')
+    async def get_user_from_file(self, user_id: int = None, username: str = None):
+        with open("./settings/users.json") as file:
+            users = Json.loads(file.read())
 
-                        usr: User = User(
-                            user, 
-                            users[user]['password'], 
-                            users[user]['current_token'], 
-                            users[user]['id']
-                        )
-                        
-                        usr.is_admin = users[user]['is_admin']
-                        usr.devices = users[user]['devices']
-                        usr.pinned_extensions = users[user]['pinned_extensions']
-                        usr.roles = users[user]['roles']
+            for user in users:
+                if users[user]['id'] == user_id or user == username:
+                    self.logger.info(f'INFO: User Loaded From File: {user}')
 
-                        self.users.append(usr)
-                        return usr 
-
-        if credentials is not None:
-            with open("settings/users.json") as file:
-                users = Json.loads(file.read())
-
-                if credentials['username'] not in users:
-                    return None
-
-                user = users[credentials['username']]
-                user_password: str = user['password']
-
-                if bcrypt.checkpw(credentials['password'], user_password.encode()):
                     usr: User = User(
-                        credentials['username'], 
-                        user['password'], 
-                        user['current_token'], 
-                        user['id']
+                        user, 
+                        users[user]['password'], 
+                        users[user]['current_token'], 
+                        users[user]['id']
                     )
                     
-                    usr.is_admin = user['is_admin']
-                    usr.devices = user['devices']
-                    usr.pinned_extensions = user['pinned_extensions']
-                    usr.roles = user['roles']
-                    return usr          
-        return None
-    
+                    usr.is_admin = users[user]['is_admin']
+                    usr.devices = users[user]['devices']
+                    usr.pinned_extensions = users[user]['pinned_extensions']
+                    usr.roles = users[user]['roles']
+                    return usr 
+
+    async def get_user_with_credentials(self, credentials):
+        if "username" not in credentials or "password" not in credentials:
+            return None
+        
+        password: bytes = credentials["password"]
+
+        for user in self.users:
+            if user.username == credentials["username"]:
+                if bcrypt.checkpw(password, user.password.encode('utf-8')):
+                    return user
+
+        user = await self.get_user_from_file(username=credentials["username"])
+
+        if not bcrypt.checkpw(password, user.password.encode('utf-8')):
+            return None
+        
+        return user
+
     async def create_user(self, user: User):
         users = None
         with open("./settings/users.json", 'r') as file:
@@ -198,10 +187,12 @@ class WebServer:
         if user.username in users:
             return False
 
+        password = bcrypt.hashpw(user.password.encode('utf-8'), bcrypt.gensalt()).decode()
+
         with open("./settings/users.json", 'w') as file:
             users[user.username] = {
                 "id": user.id,
-                "password": user.password,
+                "password": password,
                 "current_token": user.current_token,
                 "devices": user.devices,
                 "pinned_extensions": user.pinned_extensions,
@@ -233,11 +224,7 @@ class WebServer:
             "password": password.encode()
         }
 
-        for current_user in self.users:
-            if current_user.username == data['username']:
-                return Response(status=200, response=Json.dumps({ "token": current_user.current_token }), mimetype="application/json")
-
-        user: User = await self.get_user(credentials=credentials)
+        user: User = await self.get_user_with_credentials(credentials=credentials)
 
         try:
             decoded = jwt.api_jwt.decode(user.current_token, "secret", algorithms=["HS256"])
@@ -282,7 +269,6 @@ class WebServer:
         
         if user_token is None:
             return Response(status=400, response="ERROR: Failed To Generate User Token")
-
 
         user: User = User(username, password, token=user_token, id=user_id)
         created = await self.create_user(user)
@@ -342,7 +328,6 @@ class WebServer:
     
     @requires_account
     async def get_connections(self, user: User = None): 
-
         connections = self.server.connections
         connections_response = []
         for connection in connections:

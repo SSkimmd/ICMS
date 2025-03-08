@@ -1,4 +1,4 @@
-export const load = async ({ params }) => {
+export const load = async ({ fetch, params }) => {
     try {
         var server_info_response = await fetch("/api/server/info");
         const server_info = { ...server_info_response.json }
@@ -9,14 +9,14 @@ export const load = async ({ params }) => {
         device_name = device_name.replace("%20", " ");
 
         var response = await fetch("/api/devices", {
-            signal: AbortSignal.timeout(3000),
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             }
         });
+
         const data = await response.json();
-        return { ...data[device_name] }
+        return { ...data[device_name], "name": device_name }
     } catch { 
         return {}
     }

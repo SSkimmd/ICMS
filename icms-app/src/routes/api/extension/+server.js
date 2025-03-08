@@ -1,12 +1,15 @@
 export async function POST(event) {
     const data = await event.request.json();
+    
+    const auth = event.cookies.get("Authorization");
+    const token = auth.split(" ")[1];
 
     const request = await fetch("http://0.0.0.0:8081/extension", {
         signal: AbortSignal.timeout(3000),
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'debug'
+            'Authorization': token
         },
         body: JSON.stringify({
             "type": data['type'],

@@ -2,12 +2,14 @@ import { json } from '@sveltejs/kit'
 
 export async function POST(event) {
     const data = await event.request.json();
+    const auth = event.cookies.get("Authorization");
+    const token = auth.split(" ")[1];
 
     const request = await fetch("http://0.0.0.0:8081/extensions", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'debug'
+            'Authorization': token
         },
         body: JSON.stringify({
             "type": data["type"],
@@ -26,11 +28,14 @@ export async function POST(event) {
 }
 
 export async function GET(event) {
+    const auth = event.cookies.get("Authorization");
+    const token = auth.split(" ")[1];
+
     const request = await fetch("http://0.0.0.0:8081/extensions", {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'debug'
+            'Authorization': token
         }
     });
 

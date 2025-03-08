@@ -1,10 +1,13 @@
 import { json } from '@sveltejs/kit'
 
 export async function GET(event) {
+    const auth = event.cookies.get("Authorization");
+    const token = auth.split(" ")[1];
+
     const response = await fetch("http://0.0.0.0:8081/devices", {
         method: 'GET',
         headers: {
-            'Authorization': 'debug'
+            'Authorization': token
         }
     });
 
@@ -14,12 +17,15 @@ export async function GET(event) {
 
 export async function POST(event) {
     const data = await event.request.json();
+    const auth = event.cookies.get("Authorization");
+    const token = auth.split(" ")[1];
+
 
     const response = await fetch("http://0.0.0.0:8081/devices/add", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'debug'
+            'Authorization': token
         },
         body: JSON.stringify({
             "connection_name": data["connection_name"],

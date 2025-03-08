@@ -35,7 +35,7 @@ class User:
         self.username: str = username
         
         #hashed
-        self.password: str = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+        self.password: str = password
         self.current_token: str = token
 
         self.devices: dict[str, str] = {}

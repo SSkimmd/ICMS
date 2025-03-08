@@ -2,6 +2,8 @@ import { json } from '@sveltejs/kit'
 
 export async function POST(event) {
     const data = await event.request.json();
+    const auth = event.cookies.get("Authorization");
+    const token = auth.split(" ")[1];
 
     const jsonData = JSON.stringify({
         "device": data["device"],
@@ -13,7 +15,7 @@ export async function POST(event) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'debug'
+            'Authorization': token
         },
         body: jsonData
     });

@@ -1,6 +1,7 @@
 <script>
     import Sidebar from "../../components/sidebar/sidebar.svelte";
     //import { selected } from "../../lib/sidebar";
+    import Icon from "@iconify/svelte";
 
     export let data;
 </script>
@@ -28,7 +29,10 @@
                             {:else}
                                 <button class="btn bg-green-600 hover:bg-green-700 text-green-100">Enable</button>
                             {/if}
-                            <a href={"/extensions/" + extension} class="btn text-gray-400 border-1">View API</a>
+                            <a href={"/extensions/" + extension} class="btn btn-outline border-gray-600 border-2">
+                                View API
+                                <Icon class="w-5 h-5" icon="streamline:next"></Icon>
+                            </a>
                         </div>
                         </div>
                     </div>

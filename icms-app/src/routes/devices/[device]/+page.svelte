@@ -50,7 +50,7 @@
 </body>
 
 <div class="sm:pl-60 pr-20 pt-20 min-h-screen flex flex-col">
-    <p class="text-6xl pb-12">Device: {data["device_name"]}</p>
+    <p class="text-6xl pb-12">Device: {data["name"]}</p>
     <div class="grid grid-flow-rows grid-cols-3">
         <button on:click={() => { isModalOpen = true; }} class="btn bg-green-600 hover:bg-green-700  text-green-100 h-12 w-48">Send Message</button>
     </div>
