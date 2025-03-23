@@ -21,22 +21,42 @@ class StoreServer:
         self.app.add_url_rule("/extensions/upload", view_func=self.upload_extension, methods=["POST"])
         self.app.add_url_rule("/extensions", view_func=self.get_extensions, methods=["GET"])
 
-        self.app.add_url_rule("/devices/<device>", view_func=None)
-        self.app.add_url_rule("/devices/upload", view_func=None)
-        self.app.add_url_rule("/devices", view_func=None)
+        self.app.add_url_rule("/devices/<device>", view_func=self.download_device, methods=["GET"])
+        self.app.add_url_rule("/devices/upload", view_func=self.upload_device, methods=["POST"])
+        self.app.add_url_rule("/devices", view_func=self.get_devices, methods=["GET"])
+
+
+    async def download_device(self, device):
+        pass
+
+    async def upload_device(self):
+        pass
+
+    async def get_devices(self):
+        devices = { }
+        for name in os.listdir("devices"):
+            with open("devices/" + name + "/device.json") as file:
+                device = Json.loads(file.read())
+                devices[name] = device 
+        return devices
 
     async def download_extension(self, extension):
         pass
 
     async def get_extensions(self):
-        pass
+        extensions = { }
+        for name in os.listdir("extensions"):
+            with open("extensions/" + name + "/extension.json") as file:
+                extension = Json.loads(file.read())
+                extensions[name] = extension 
+        return extensions
 
     async def upload_extension(self):
         file = request.files['file']
         new_path = "extensions/" + file.filename
         file.save(new_path)
 
-        return "worked?"
+        return ""
 
 
 def StartStoreServer():

@@ -19,5 +19,8 @@
     "tailwindcss": "^3",
     "vite": "^4",
     "vite-plugin-mkcert": "^1.17.6"
+  },
+  "dependencies": {
+    "npm": "^11.2.0"
   }
 }

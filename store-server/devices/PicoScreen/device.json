@@ -1,0 +1,12 @@
+{
+    "name": "Pico Screen",
+    "description": "This is a test description",
+    "author": "tom",
+    "thumbnail": "",
+    "date": "",
+    "source": "src",
+    "compatibility": [
+        "Pico",
+        "Pico-W"
+    ]
+}

@@ -17,8 +17,8 @@ async def connect():
     global wifi_connected
     global pool
     
-    ssid = "Bowden Hall"
-    password = "bowden1234"
+    ssid = ""
+    password = ""
     default_leds = (5, 0, 1)
     retry_delay = 120
     enabled = False
