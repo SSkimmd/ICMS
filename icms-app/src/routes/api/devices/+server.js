@@ -1,10 +1,12 @@
 import { json } from '@sveltejs/kit'
+import { GetURL } from '../../../lib/server/urls.server.js';
 
 export async function GET(event) {
     const auth = event.cookies.get("Authorization");
     const token = auth.split(" ")[1];
 
-    const response = await fetch("http://0.0.0.0:8081/devices", {
+    const url = await GetURL();
+    const response = await fetch(url + "devices", {
         method: 'GET',
         headers: {
             'Authorization': token
@@ -20,8 +22,8 @@ export async function POST(event) {
     const auth = event.cookies.get("Authorization");
     const token = auth.split(" ")[1];
 
-
-    const response = await fetch("http://0.0.0.0:8081/devices/add", {
+    const url = await GetURL();
+    const response = await fetch(url + "devices/add", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

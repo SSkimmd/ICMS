@@ -1,0 +1,10 @@
+services:
+  icms-server:
+    build: ./icms-server
+    ports: 
+      - "8081:8081"
+      - "8080:8080"
+  icms-app:
+    build: ./icms-app
+    ports:
+    - "5173:5173"

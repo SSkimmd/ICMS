@@ -1,4 +1,5 @@
 import { json } from '@sveltejs/kit'
+import { GetURL } from '../../../lib/server/urls.server.js';
 
 export async function POST(event) {
     const data = await event.request.json();
@@ -11,7 +12,8 @@ export async function POST(event) {
         "arguments": data["arguments"]
     })
 
-    const response = await fetch("http://0.0.0.0:8081/device", {
+    const url = await GetURL();
+    const response = await fetch(url + "device", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

@@ -1,4 +1,5 @@
 import { error, json, text } from '@sveltejs/kit'
+import { GetURL } from '../../../../lib/server/urls.server.js';
 
 export async function POST(event) {
     const data = await event.request.json();
@@ -7,7 +8,8 @@ export async function POST(event) {
     const token = auth.split(" ")[1];
 
     try {
-        const response = await fetch("http://0.0.0.0:8081/server/log", {
+        const url = await GetURL();
+        const response = await fetch(url + "server/log", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

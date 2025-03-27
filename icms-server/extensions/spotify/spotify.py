@@ -40,7 +40,6 @@ class Spotify(Extension):
         song = self.sp.current_user_playing_track()['item']['name']
         return f"SUCCESS: Song Is: {song}"
         
-        
     async def next_track(self):
         if self.sp is None:
             return "ERROR: Spotipy Failed To Intialise"

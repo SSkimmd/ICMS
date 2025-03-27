@@ -4,7 +4,7 @@ import asyncio
 import time
 import json as Json
 from datatypes import Connection
-from stream import Server as StreamServer
+from streamserver import Server as StreamServer
 
 class LEDS(Extension):
     def __init__(self, server: StreamServer):

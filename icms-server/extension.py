@@ -1,4 +1,4 @@
-from stream import Server as StreamServer
+from streamserver import Server as StreamServer
 import inspect
 
 class Extension(object):

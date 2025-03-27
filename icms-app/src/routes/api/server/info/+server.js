@@ -1,8 +1,11 @@
+import { GetURL } from '../../../../lib/server/urls.server.js';
+
 export async function GET(event) {
     const auth = event.cookies.get("Authorization");
     const token = auth.split(" ")[1];
 
-    const response = await fetch("http://0.0.0.0:8081/server/info", {
+    const url = await GetURL();
+    const response = await fetch(url + "server/info", {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

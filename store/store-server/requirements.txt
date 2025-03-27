@@ -1,0 +1,7 @@
+gunicorn
+flask[async]
+asyncio
+flask-cors
+pyjwt
+requests
+bcrypt
