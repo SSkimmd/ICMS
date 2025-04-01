@@ -5,4 +5,7 @@ import mkcert from 'vite-plugin-mkcert'
 
 export default defineConfig({
   plugins: [sveltekit(), tailwindcss()],
+  server: {
+    allowedHosts: ['store-app']
+  }
 });

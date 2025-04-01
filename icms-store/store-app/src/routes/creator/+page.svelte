@@ -10,10 +10,19 @@
             <form method="dialog">
                 <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
             </form>
-            <h3 class="text-lg font-bold">New Device</h3>
+            <h3 class="text-lg font-bold">New Upload</h3>
             <form method="POST" action="?/upload" enctype="multipart/form-data">
+                <p class="pt-4 text-sm fieldset-legend">Enter Name</p>
+                <input name="name" class="input" placeholder="name"/>
+
+                <p class="pt-4 text-sm fieldset-legend">Select Upload Type</p>
+                <select name="type" class="select">
+                    <option>extension</option>
+                    <option>device</option>
+                </select>
+
                 <fieldset class="fieldset">
-                    <legend class="fieldset-legend">Select Packaged Device File</legend>
+                    <legend class="fieldset-legend">Select Packaged File</legend>
                     <input 
                     name="fileInput" type="file" accept=".zip, .rar, .7zip" multiple="false" class="file-input file-input-ghost"/>
                 </fieldset>

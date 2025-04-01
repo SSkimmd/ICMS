@@ -6,13 +6,23 @@ import sys
 import os
 import ssl
 import importlib
-import sqlite3
+import aiosqlite
 
 from threading import Thread
 from flask import Flask, request, send_file
 from flask import Response
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
+
+
+
+#==================================================== MAKE THE AUTH SERVER AND SWITCH THIS SHIT TO A SQLITE DATABASE YOU DUMB FUCK
+
+
+
+
+
+
 
 class StoreServer:
     def __init__(self):
@@ -25,6 +35,28 @@ class StoreServer:
         self.app.add_url_rule("/devices/<device>", view_func=self.download_device, methods=["GET"])
         self.app.add_url_rule("/devices/upload", view_func=self.upload_device, methods=["POST"])
         self.app.add_url_rule("/devices", view_func=self.get_devices, methods=["GET"])
+
+        self.app.add_url_rule("/test", view_func=self.db_test, methods=["GET"])  
+    
+    async def db_test(self):
+        try:
+            async with aiosqlite.connect('database.db') as db:
+                #table = """
+                #CREATE TABLE devices (
+                #    id INTEGER PRIMARY KEY,
+                #    name TEXT NOT NULL,
+                #    type TEXT NOT NULL,
+                #    date INTEGER NOT NULL
+                #); 
+                #"""
+                #await db.execute(table)
+                #await db.execute("INSERT INTO devices (name, date) VALUES ('RPI Pico-W', '1')")
+                #await db.commit()
+                return Response(status=200, response={})
+        except Exception as e:
+            print(repr(e))
+            return Response(status=400, response='failed')
+
 
 
     async def download_device(self, device):
@@ -63,8 +95,9 @@ class StoreServer:
         return extensions
 
     async def upload_extension(self):
+        print(request.form)
         file = request.files['file']
-        new_path = "extensions/" + file.filename
+        new_path = request.form['type'] + "s/" + request.form['name'] + ".zip"
         file.save(new_path)
 
         return "worked"

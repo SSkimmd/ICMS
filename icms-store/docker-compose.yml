@@ -1,0 +1,14 @@
+services:
+  store-server:
+    build: ./store-server
+  store-app:
+    build: ./store-app
+  nginx:
+    image: nginx
+    depends_on:
+      - store-server
+      - store-app
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - '8080:80'
