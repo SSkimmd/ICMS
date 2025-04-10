@@ -14,4 +14,16 @@ export const load = async ({ params, fetch }) => {
 }
 
 export const actions = {
+    download: async({ request, fetch }) => {
+        const data = await request.formData();
+        const extension = await data.get('extension');
+        const response = await fetch("/api/store/extensions/download", {
+            method: "POST",
+            body: JSON.stringify({
+                'extension': extension
+            })
+        })
+
+        return response;
+    }
 }

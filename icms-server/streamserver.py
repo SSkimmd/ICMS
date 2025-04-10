@@ -190,7 +190,7 @@ class Server:
             Json.dump(config, device_config, indent=4)
         return (200, "SUCCESS: Added New Device")
     
-    async def process_request(self, request, connection: Connection = None):
+    async def process_json_request(self, request, connection: Connection = None):
         """
             Proccess and perform request based on the type attribute
 
@@ -293,7 +293,7 @@ class Server:
 
             try:
                 request = Json.loads(data.decode())
-                response = await self.process_request(request, connection)
+                response = await self.process_json_request(request, connection)
                 writer.write(Json.dumps(response).encode())
                 await writer.drain()
             except Exception as e:

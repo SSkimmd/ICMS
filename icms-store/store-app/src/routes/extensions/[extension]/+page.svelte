@@ -11,6 +11,7 @@
         })
 
         const blob = await response.blob();
+        console.log(blob);
 
         var url = window.URL || window.webkitURL;
         let link = url.createObjectURL(blob);

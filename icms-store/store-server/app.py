@@ -60,6 +60,7 @@ class StoreServer:
 
 
     async def download_device(self, device):
+        print("downloading device " + device)
         name = secure_filename(device)
         file = os.path.join('devices/', name + ".zip")
         return send_file(file, as_attachment=True)
@@ -79,6 +80,7 @@ class StoreServer:
         return devices
 
     async def download_extension(self, extension):
+        print("downloading extension " + extension)
         name = secure_filename(extension)
         file = os.path.join('extensions/', name + ".zip")
         return send_file(file, as_attachment=True)

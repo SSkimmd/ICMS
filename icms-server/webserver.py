@@ -79,7 +79,23 @@ class WebServer:
         self.app.add_url_rule("/stop", view_func=self.stop, methods=["GET"])
         self.app.add_url_rule("/start", view_func=self.start, methods=["GET"])
 
+    def check_files(self):
+        if not os.path.isfile("./settings/extensions.json"):
+            with open("./settings/extensions.json", 'w') as file:
+                Json.dump({}, file, indent=4)
+            self.logger.error("ERROR: Could Not Find File /settings/extensions.json, Created New File Instead")
+
+        if not os.path.isfile("./settings/users.json"):
+            with open("./settings/users.json", 'w') as file:
+                Json.dump({}, file, indent=4)
+            self.logger.error("ERROR: Could Not Find File /settings/users.json, Created New File Instead")
+
+        if not os.path.isfile("./logs/log.txt"):
+            file = open("./logs/log.txt", 'x')
+
     def init_extensions(self):
+        self.check_files()
+
         with open("./settings/extensions.json") as file:
             json = Json.load(file)
 
@@ -99,19 +115,14 @@ class WebServer:
                 try:
                     if sys.modules.get(lib):
                         sys.modules.pop(lib)
-                        print(f'Reimporting: {extension}')
+                        self.logger.info(f'Reimporting: {extension}')
                     new_module = importlib.import_module(lib) 
                     new_extension: Extension = new_module.initialise(self.server)
                     self.extensions[extension] = new_extension
-                    print(f'Started Extension: {extension}')
+                    self.logger.info(f'Started Extension: {extension}')
                 except:
-                    print(f'Failed To Import Module Name: {extension}')
+                    self.logger.info(f'Failed To Import Module Name: {extension}')
                     continue
-        
-        if not os.path.isfile("./settings/users.json"):
-            with open("./settings/users.json", 'w') as file:
-                Json.dump({}, file, indent=4)
-            self.logger.error("ERROR: Could Not Find users.json, Created New Instead")
         return
     
     def requires_account(f):

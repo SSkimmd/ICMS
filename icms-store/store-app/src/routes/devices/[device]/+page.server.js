@@ -23,5 +23,7 @@ export const actions = {
                 'device': device
             })
         })
+
+        return response;
     }
 }

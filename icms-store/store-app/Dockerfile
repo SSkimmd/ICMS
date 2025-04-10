@@ -5,4 +5,5 @@ RUN rm .env
 RUN cp .env.docker .env
 RUN rm .env.docker
 RUN npm install --legacy-peer-deps
-CMD ["npm", "run", "host"]
+RUN npm run build
+CMD ["npm", "run", "preview", "--", "--host"]
