@@ -8,6 +8,14 @@ class RequestType(Enum):
     POST = 1
     GET = 2
 
+class PostType(Enum):
+    DEVICE = 0
+    EXTENSION = 1
+
+class GetType(Enum):
+    DEVICE = 0
+    EXTENSION = 1
+
 class DeviceRequest:
     """
         Base Device Request Class
@@ -28,7 +36,8 @@ class DevicePostRequest(DeviceRequest):
     """
         Device Post Request
     """
-    def __init__(self, )
+    def __init__(self):
+        pass
 
 
 

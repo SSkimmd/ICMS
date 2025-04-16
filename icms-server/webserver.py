@@ -488,11 +488,3 @@ class WebServer:
         asyncio.run(self.server.start())
 
         return Response("Starting...", 200)
-
-def StartWebServer():
-    server = WebServer()
-
-    server_thread = Thread(target=server.start, daemon=True)
-    server_thread.start()
-
-    return server.app

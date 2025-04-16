@@ -11,8 +11,8 @@ import pickle
 
 import extension as Extension
 from asyncio import CancelledError
-from datatypes import Device, Connection, User, Callback, RequestType
-from datatypes import AuthenticateRequest, GetDeviceRequest, GetExtensionRequest
+from datatypes import Device, Connection, User, Callback, RequestType, PostType, GetType
+from datatypes import AuthenticateRequest
 
 from pydoc import locate
 
@@ -186,38 +186,60 @@ class Server:
     async def get_device(self, device_name: str):
         pass
 
+    #{
+    #    "type": "get",
+    #    "get": {
+    #        "device": "test"
+    #    }
+    #}
+
+
+
+
+
+
     async def on_request(self, request, connection: Connection = None):
         if request is None:
             return "ERROR: Request Failed"
 
-        request_type: RequestType = request["type"]
+        request_type: RequestType = RequestType[request['type']] 
 
         if request_type == RequestType.AUTHENTICATE:
-            device_name: str = request["devicename"]
+            device_name: str = request['device']
             auth_request: AuthenticateRequest = AuthenticateRequest(connection.uuid, device_name)
             await self.authenticate(auth_request)
 
         if request_type == RequestType.GET:
-            device_name: str = request["devicename"]
-            await self.get_device(device_name)
+            get_type: GetType = GetType[request['get']['type']]
+
+            if get_type == GetType.DEVICE:
+                device_name: str = request['get']['device']         
+                await self.get_device(device_name)
+            if get_type == GetType.EXTENSION:
+                extension_name: str = request['get']['extension']
+                await self.get_extensions(extension_name)
 
         if request_type == RequestType.POST:
-            pass
+            post_type: PostType = PostType[request['post']['type']]
+
+            if post_type == PostType.DEVICE:
+                device_name: str = request['post']['device']
+                await self.call_device()
                    
-        return "ERROR: Failed To Proccess Request"
+        return "ERROR: Failed To Process Request"
 
     async def on_recieved(self, data: bytes, connection: Connection):    
-        data = data.decode()
-        
+        data = data.decode('utf-8')
+ 
         try: 
             request = Json.loads(data) 
-            await self.on_request(request, connection)
+            response = await self.on_request(request, connection)
         except Exception as e:
             self.logger.info(repr(e)) 
 
 
     async def on_connected(self, connection: Connection):
-        connection.writer.write(connection.uuid.encode())
+        connection.writer.write(str(connection.uuid).encode())
         await connection.writer.drain()
 
         data = await connection.reader.read(1024)
