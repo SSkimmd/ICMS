@@ -1,5 +1,41 @@
 import asyncio
 import bcrypt
+from enum import Enum
+
+
+class RequestType(Enum):
+    AUTHENTICATE = 0
+    POST = 1
+    GET = 2
+
+class DeviceRequest:
+    """
+        Base Device Request Class
+    """
+    def __init__(self, request_type: int):
+        self.request_type: int = request_type
+
+class AuthenticateRequest(DeviceRequest):
+    """
+        Device Authentication Request
+    """
+    def __init__(self, connection_id: str, device_name: str):
+        super.__init__(0)
+        self.connection_id: str = connection_id
+        self.device_name: str = device_name
+
+class DevicePostRequest(DeviceRequest):
+    """
+        Device Post Request
+    """
+    def __init__(self, )
+
+
+
+
+
+
+
 
 
 class Callback:
@@ -8,21 +44,12 @@ class Callback:
         self.is_persistent = is_persistent
 
 class Connection:
-    def __init__(self, id: int, writer: asyncio.StreamWriter, reader: asyncio.StreamReader, endpoints = None):
-        self.id = id
+    def __init__(self, uuid: str, writer: asyncio.StreamWriter, reader: asyncio.StreamReader, endpoints = None):
+        self.uuid: str = uuid
         self.writer: asyncio.StreamWriter = writer
         self.reader: asyncio.StreamReader = reader
-        self.callbacks: list[Callback] = []
-        self.connection_name = ""
         self.device: Device = None
-        self.connected = False
-        
-        if endpoints is None: self.endpoints: list[str] = []
-        else: self.endpoints = endpoints
 
-    def create_callback(self, function, is_persistent):
-        new_callback = Callback(function, is_persistent)
-        self.callbacks.append(new_callback)
 
 class Device:
     def __init__(self, device_name, device_type):

@@ -17,16 +17,21 @@ export const actions = {
             })
         }); 
 
-        const token = await response.json();
+        if(response.ok) {
+            const token = await response.json();
 
-        cookies.set('Authorization', `Bearer ${token['token']}`, {
-            httpOnly: true,
-            path: '/',
-            secure: false,
-            sameSite: 'strict',
-            maxAge: 60 * 60 * 24 // 1 day
-        });
+            cookies.set('Authorization', `Bearer ${token['token']}`, {
+                httpOnly: true,
+                path: '/',
+                secure: false,
+                sameSite: 'strict',
+                maxAge: 60 * 60 * 24 // 1 day
+            });
 
-        throw redirect(302, '/dashboard');
+            throw redirect(302, '/dashboard');
+        }
+        
+
+        return;
     }
 }

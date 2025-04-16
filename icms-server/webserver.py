@@ -132,9 +132,6 @@ class WebServer:
 
             if token is None:
                 return Response(status=400, response="ERROR: Authorization Header Not Found")
-            
-            if token == 'debug':
-                return await f(self, *args, **kwargs)
 
             user_id = await get_user_id(token)
             user: User = await self.get_user_by_id(user_id=user_id)
@@ -149,11 +146,15 @@ class WebServer:
         return decorated    
 
     async def get_user_by_id(self, user_id: int):
+        if len(self.users) == 0:
+            return
+
         for user in self.users:
             if user.id == user_id:
                 return user
 
         user = await self.get_user_from_file(user_id)
+        self.users.append(user)
         return user
 
     async def get_user_from_file(self, user_id: int = None, username: str = None):
@@ -425,7 +426,7 @@ class WebServer:
 
 
         out = ""
-        log = util.reverse_readline("logs/log.txt")
+        log = utilities.reverse_readline("logs/log.txt")
         count = 0
         for line in log:
             if count == lines:
@@ -463,9 +464,24 @@ class WebServer:
         asyncio.run(self.server.close())
         return Response("Stopping...", 200)   
     
+    def get_settings(self):
+        with open("./settings/server.json") as file:
+            server_settings = Json.load(file)
+
+        if server_settings is None:
+            return
+
+        server_host = server_settings["servers"]["host"]
+        server_port = server_settings["servers"]["stream"]["port"]
+
+        return server_host, server_port
+
     def start(self):
         self.init_extensions()
-        self.server = StreamServer(ssl_context=None)
+
+        server_host, server_port = self.get_settings()
+
+        self.server = StreamServer(host=server_host, port=server_port)
         self.server.extensions = self.extensions
 
         self.start_time = time.time()

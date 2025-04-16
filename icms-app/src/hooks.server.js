@@ -4,17 +4,21 @@ export const handle = async({ event, resolve }) => {
     const requestedPath = event.url.pathname;
     const authorization = event.cookies.get('Authorization');
 
-    if(!authorization && requestedPath == "/api/login") {
-        return await resolve(event);
+    if(!authorization) {
+        if(requestedPath != "/api/login" && requestedPath != "/login") {
+            throw redirect(302, '/login');
+        }
+    } else {
+        const token = authorization.split(' ')[1];
+
+        if(token == 'undefined' && requestedPath != '/login') {
+            throw redirect(302, '/login');
+        }
+        if(token != 'undefined' && requestedPath == '/login') {
+            throw redirect(302, '/dashboard');
+        }
     }
 
-    if(!authorization && requestedPath != "/login") {
-        return new Response('Unauthorized', {
-            status: 401,            
-        })
-    } else if(authorization && requestedPath == "/login") {
-        throw redirect(302, '/dashboard');
-    }
 
     return await resolve(event);
 }

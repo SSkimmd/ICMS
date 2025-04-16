@@ -1,3 +1,4 @@
+import { error } from '@sveltejs/kit';
 import { GetURL } from '../../../lib/server/urls.server.js'
 
 export async function POST(event) {
@@ -16,10 +17,8 @@ export async function POST(event) {
         });
 
         const token = await response.json();
-        return new Response(JSON.stringify(token));
+        return new Response(JSON.stringify({"token": token['token']}));
     } catch {
-        const res = new Response();
-        res.status = 500;
-        return res;
+        throw error(400);
     }
 }

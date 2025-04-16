@@ -1,6 +1,8 @@
 from streamserver import Server as StreamServer
 import inspect
 
+# add more stuff here to be able to interact with the server without specifically having access to it
+
 class Extension(object):
     def __init__(self, server: StreamServer):
         self.server: StreamServer = server

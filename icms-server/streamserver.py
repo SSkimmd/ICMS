@@ -6,16 +6,23 @@ import utilities
 import sys
 import logging
 import ssl
-import extension as Extension
+import uuid
+import pickle
 
+import extension as Extension
 from asyncio import CancelledError
-from datatypes import Device, Connection, User, Callback
+from datatypes import Device, Connection, User, Callback, RequestType
+from datatypes import AuthenticateRequest, GetDeviceRequest, GetExtensionRequest
+
 from pydoc import locate
 
 
 class Server:
-    def __init__(self, ssl_context = None, extensions: map = None):
-        self.connections: dict[int, Connection] = {}
+    def __init__(self, host: str, port: int, ssl_context = None, extensions: map = None):
+        self.host = host
+        self.port = port
+
+        self.connections: dict[str, Connection] = {}
         self.devices: dict[str, Device] = {}
 
         self.extensions: map[str, Extension.Extension] = extensions
@@ -39,27 +46,10 @@ class Server:
 
     async def start(self):
         self.running = True
-        self.logger.info(f'Stream Server Listening at: 0.0.0.0:8080')
-        self.server = await asyncio.start_server(self.update, '0.0.0.0', 8080)
+        self.logger.info(f'Stream Server Listening at: {self.host}:{self.port}')
+        self.server = await asyncio.start_server(self.create_connection, self.host, self.port)
 
         await self.server.serve_forever()
-
-    async def get_connection(self, id = None, name = None, connection_name = None):
-        if id is not None:
-            if self.connections[id] is not None:
-                return self.connections[id]       
-            
-        if name is not None:
-            for id in self.connections:
-                if self.connections[id].device.device_name == name:
-                    return self.connections[id]
-                
-        if connection_name is not None:
-            for id in self.connections:
-                if self.connections[id].connection_name == connection_name:
-                    return self.connections[id]
-
-        return None
     
     async def get_device(self, device_name):
         if self.devices[device_name] is not None:
@@ -190,111 +180,67 @@ class Server:
             Json.dump(config, device_config, indent=4)
         return (200, "SUCCESS: Added New Device")
     
-    async def process_json_request(self, request, connection: Connection = None):
-        """
-            Proccess and perform request based on the type attribute
+    async def authenticate(self, request: AuthenticateRequest):
+        pass
 
-            Request Types
+    async def get_device(self, device_name: str):
+        pass
 
-            LOG: Log-out the message contained in the request, this is used by connected devices
+    async def on_request(self, request, connection: Connection = None):
+        if request is None:
+            return "ERROR: Request Failed"
 
-            POST: Similarly to the REST keyword, call a function with arguments
+        request_type: RequestType = request["type"]
 
-            GET: Also similar to the REST keyword, get data from a function or endpoint
+        if request_type == RequestType.AUTHENTICATE:
+            device_name: str = request["devicename"]
+            auth_request: AuthenticateRequest = AuthenticateRequest(connection.uuid, device_name)
+            await self.authenticate(auth_request)
 
-            CONNECT: Used by client devices to connect to authenticate with the stream server
-        """
+        if request_type == RequestType.GET:
+            device_name: str = request["devicename"]
+            await self.get_device(device_name)
 
-        if request is not None:
-            #check if user is authorised
-            #if connection is None: 
-            #    self.logger.error('ERROR: Connection Error')
-            #    return 'ERROR: Connection Error'
-
-            if "type" not in request: 
-                return 'ERROR: Key Error (type)'
-            
-            #log to server logger from connected client
-            #should be pre-authorised unless guest logging is enabled
-            if request["type"] == "LOG":
-                pass
-
-            if request["type"] == "CONNECT":
-                #login for device per new session
-                if "name" not in request:
-                    return (400, f'ERROR: Connection Name Key Error')
-                
-                if not connection:
-                    return (400, f'ERROR: Connection Does Not Exist')
-                
-                name = request["name"]
-                endpoints = request["endpoints"]
-                
-                connection.connection_name = name
-                connection.endpoints = endpoints
-
-                file_name = os.getcwd() + "/settings/devices/"+ name + ".json"
-
-                if os.path.exists(file_name):
-                    with open(file_name) as f:
-                        config = Json.load(f)
-
-                        if "device_name" not in config and "device_type" not in config:
-                            return (200, f'ERROR: Device Config Key Error: ' + name)
-                        
-                        device_name = config["device_name"]
-                        device_type = config["device_type"]
-
-                        connection.device = Device(device_name, device_type)
-                        self.devices[name] = connection.device
-                    return (200, f'SUCCESS: Connected Existing Device: ' + name)
-                return (200, f'SUCCESS: Connected New Device: ' + name)
-
-            #==================================== GET =======================================================           
-            if request["type"] == "GET":
-                if "extension" not in request:
-                    return (400, "ERROR: Key Error In GET Request")
-                    
-                response = await self.get_extensions(request["extension"])
-                return response
-            #==================================== POST =======================================================
-            if request["type"] == "POST":
-                response = await self.call_function(request)
-                return response
+        if request_type == RequestType.POST:
+            pass
                    
         return "ERROR: Failed To Proccess Request"
 
-    async def update(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
+    async def on_recieved(self, data: bytes, connection: Connection):    
+        data = data.decode()
+        
+        try: 
+            request = Json.loads(data) 
+            await self.on_request(request, connection)
+        except Exception as e:
+            self.logger.info(repr(e)) 
+
+
+    async def on_connected(self, connection: Connection):
+        connection.writer.write(connection.uuid.encode())
+        await connection.writer.drain()
+
+        data = await connection.reader.read(1024)
+        if data: await self.on_recieved(data, connection)
+        else: return
+
+    async def create_connection(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
         peername = writer.get_extra_info('peername')
-        self.logger.info('Connection From {}'.format(peername))
+        self.logger.info(f'Connection From {format(peername)}')
 
-        #log user
-        connection: Connection = Connection(len(self.connections), writer, reader)
-        self.connections[connection.id] = connection
-        connection.connected = True
+        connection_id: str = uuid.uuid4()
+        new_connection: Connection = Connection(connection_id, writer, reader)
+        await self.on_connected(new_connection)
 
-        while connection.connected:
-            data = await reader.read(1024)
 
-            if not data:
-                if connection is not None:
-                    self.logger.info(f'Device Disconnected: {self.connections[connection.id].device.device_name}')
-                    connection.connected = False
-                    del self.connections[connection.id]
-                break
+#create a new connection
+#each connection can be a new device if the device is paired with the user
+#each user has multiple devices
 
-            if connection is not None:
-                if(len(connection.callbacks) > 0):
-                    for callback in connection.callbacks:
-                        await callback.function(data)
+#device can be paired through sending packet of data which will return token
+#token determines if the device is paired
+#token will be used to determine if the device should be stay alive despite potentially disconnecting
+#potentially add permanent tokens for each device (hardware id style)
 
-                        if not callback.is_persistent:
-                            connection.callbacks.remove(callback)
-
-            try:
-                request = Json.loads(data.decode())
-                response = await self.process_json_request(request, connection)
-                writer.write(Json.dumps(response).encode())
-                await writer.drain()
-            except Exception as e:
-                self.logger.info(repr(e))
+#determine if the packet of data is of json type or needs to be manually decoded
+#allow user to set their own packet types with their own ways of decoding
