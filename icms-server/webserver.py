@@ -18,7 +18,7 @@ from extension import Extension
 from threading import Thread
 from flask import Flask, request
 from flask import Response
-from datatypes import Device, Connection, User, Callback
+from datatypes import Device, Connection, User
 from flask_cors import CORS
 from streamserver import Server as StreamServer
 
@@ -93,9 +93,26 @@ class WebServer:
         if not os.path.isfile("./logs/log.txt"):
             file = open("./logs/log.txt", 'x')
 
-    def init_extensions(self):
-        self.check_files()
+    def init_users(self):
+        with open("./settings/users.json") as file:
+            users = Json.loads(file.read())
 
+            for user in users:
+                usr: User = User(
+                    user, 
+                    users[user]['password'], 
+                    users[user]['current_token'], 
+                    users[user]['id']
+                )
+                
+                usr.is_admin = users[user]['is_admin']
+                usr.devices = users[user]['devices']
+                usr.pinned_extensions = users[user]['pinned_extensions']
+                usr.roles = users[user]['roles']
+
+                self.users.append(usr)
+
+    def init_extensions(self):
         with open("./settings/extensions.json") as file:
             json = Json.load(file)
 
@@ -477,12 +494,15 @@ class WebServer:
         return server_host, server_port
 
     def start(self):
+        self.check_files()
+        self.init_users()
         self.init_extensions()
 
         server_host, server_port = self.get_settings()
 
         self.server = StreamServer(host=server_host, port=server_port)
         self.server.extensions = self.extensions
+        self.server.users = self.users
 
         self.start_time = time.time()
         asyncio.run(self.server.start())

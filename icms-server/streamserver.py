@@ -2,6 +2,8 @@ import asyncio
 import json as Json
 import os
 import re
+
+import bcrypt
 import utilities
 import sys
 import logging
@@ -23,7 +25,7 @@ class Server:
         self.port = port
 
         self.connections: dict[str, Connection] = {}
-        self.devices: dict[str, Device] = {}
+        self.users: list[User] = []
 
         self.extensions: map[str, Extension.Extension] = extensions
         self.running = False
@@ -162,83 +164,135 @@ class Server:
             return (400, f'ERROR: Argument Name Error')
         return (400, response)
     
-    async def add_device(self, connection_name: str, device: Device):
-        connection: Connection = await self.get_connection(connection_name=connection_name)
+    #async def add_device(self, connection_name: str, device: Device):
+    #    connection: Connection = await self.get_connection(connection_name=connection_name)
 
-        if connection is None:
-            return(400, "ERROR: Failed To Get Connection")
+    #    if connection is None:
+    #        return(400, "ERROR: Failed To Get Connection")
 
-        self.devices[connection_name] = device
-        connection.device = self.devices[connection_name]
+    #    self.devices[connection_name] = device
+    #    connection.device = self.devices[connection_name]
 
-        with open(os.getcwd() + "/settings/devices/" + connection_name + ".json", 'w') as device_config:
-            config = {
-                "connection_name": connection_name,
-                "device_name": device.device_name,
-                "device_type": device.device_type
-            }
-            Json.dump(config, device_config, indent=4)
-        return (200, "SUCCESS: Added New Device")
+    #    with open(os.getcwd() + "/settings/devices/" + connection_name + ".json", 'w') as device_config:
+    #        config = {
+    #            "connection_name": connection_name,
+    #            "device_name": device.device_name,
+    #            "device_type": device.device_type
+    #        }
+    #        Json.dump(config, device_config, indent=4)
+    #    return (200, "SUCCESS: Added New Device")
     
-    async def authenticate(self, request: AuthenticateRequest):
-        pass
+    async def get_user(self, username: str) -> User:
+        for user in self.users:
+            if username == user.username:
+                return user
+            
+    # get connection from current server connections using id
+    async def get_connection(self, connection_id: str) -> Connection:
+        return self.connections[connection_id]
 
-    async def get_device(self, device_name: str):
-        pass
+    # authenticate a device, has to have an account loaded or connected
+    async def authenticate(self, request: AuthenticateRequest):
+        user = await self.get_user(request.username)
+
+        if user is None:
+            return "ERROR: User Not Found"
+
+        if bcrypt.checkpw(request.password.encode(), user.password.encode()):
+            connection: Connection = await self.get_connection(request.connection_id)
+            connection.device = Device(request.device_name, request.device_type)
+            connection.connection_token = "newtoken"
+            user.connections.append(connection)
+            return "SUCCESS: Authenticated Device"
+
+        return "ERROR: Incorrect Username Or Password"
+
+    # get device from a user using the username of an authenticated account
+    # device needs to be currently connected
+    async def get_user_device(self, username: str, device_name: str) -> Device:
+        user: User = self.get_user(username)
+        if user is None: return None
+
+        for connection in user.connections:
+            if connection.device.device_name == device_name:
+                return connection.device
+
 
     #{
-    #    "type": "get",
-    #    "get": {
+    #    "type": "GET",
+    #    "GET": {
     #        "device": "test"
     #    }
     #}
-
-
-
-
+    #{
+    #    "type": "POST",
+    #    "POST": {
+    #        "device": "test",
+    #        "request": {
+    #          
+    #        }
+    #    }
+    #}
+    #{
+    #    "type": "AUTHENTICATE",
+    #    "username": "tom",
+    #    "password": "tom123",
+    #    "device": "Test Device",
+    #    "devicetype": "both"
+    #}
 
 
     async def on_request(self, request, connection: Connection = None):
         if request is None:
             return "ERROR: Request Failed"
-
+        
         request_type: RequestType = RequestType[request['type']] 
 
         if request_type == RequestType.AUTHENTICATE:
+            username: str = request['username']
+            password: str = request['password']
             device_name: str = request['device']
-            auth_request: AuthenticateRequest = AuthenticateRequest(connection.uuid, device_name)
+            device_type: str = request['devicetype']
+            auth_request: AuthenticateRequest = AuthenticateRequest(connection.uuid, username, password, device_name, device_type)
             await self.authenticate(auth_request)
 
-        if request_type == RequestType.GET:
-            get_type: GetType = GetType[request['get']['type']]
+        if connection.connection_token is None:
+            return "ERROR: Connection Has Not Been Authenticated"
 
-            if get_type == GetType.DEVICE:
-                device_name: str = request['get']['device']         
+        if request_type == RequestType.GET:
+            getType: GetType = GetType[request['GET']['type']]
+
+            if getType == GetType.DEVICE:
+                device_name: str = request['GET']['device']         
                 await self.get_device(device_name)
-            if get_type == GetType.EXTENSION:
-                extension_name: str = request['get']['extension']
+
+            if getType == GetType.EXTENSION:
+                extension_name: str = request['GET']['extension']
                 await self.get_extensions(extension_name)
 
         if request_type == RequestType.POST:
-            post_type: PostType = PostType[request['post']['type']]
+            postType: PostType = PostType[request['POST']['type']]
 
-            if post_type == PostType.DEVICE:
-                device_name: str = request['post']['device']
-                await self.call_device()
+            if postType == PostType.DEVICE:
+                device_name: str = request['POST']['device']
+                post_request: str = request['POST']['request']
+                await self.call_device(post_request)
                    
         return "ERROR: Failed To Process Request"
 
     async def on_recieved(self, data: bytes, connection: Connection):    
         data = data.decode('utf-8')
  
-        try: 
-            request = Json.loads(data) 
-            response = await self.on_request(request, connection)
-        except Exception as e:
-            self.logger.info(repr(e)) 
+        #try: 
+        request = Json.loads(data) 
+        response = await self.on_request(request, connection)
+        #except Exception as e:
+        #    self.logger.info(f'ERROR: {repr(e)}') 
 
 
     async def on_connected(self, connection: Connection):
+        self.connections[connection.uuid] = connection
+
         connection.writer.write(str(connection.uuid).encode())
         await connection.writer.drain()
 

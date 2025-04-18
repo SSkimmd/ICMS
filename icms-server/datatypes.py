@@ -27,10 +27,13 @@ class AuthenticateRequest(DeviceRequest):
     """
         Device Authentication Request
     """
-    def __init__(self, connection_id: str, device_name: str):
-        super.__init__(0)
+    def __init__(self, connection_id: str, username: str, password: str, device_name: str, device_type: str):
+        self.request_type = 1
         self.connection_id: str = connection_id
+        self.username: str = username
+        self.password: str = password
         self.device_name: str = device_name
+        self.device_type: str = device_type
 
 class DevicePostRequest(DeviceRequest):
     """
@@ -58,6 +61,7 @@ class Connection:
         self.writer: asyncio.StreamWriter = writer
         self.reader: asyncio.StreamReader = reader
         self.device: Device = None
+        self.connection_token: str = None
 
 
 class Device:
@@ -75,6 +79,8 @@ class User:
         self.current_token: str = token
 
         self.devices: dict[str, str] = {}
+
+        self.connections: list[Connection] = []
         
         self.pinned_extensions: list[str] = []
 
