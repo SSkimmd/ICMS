@@ -88,10 +88,10 @@ class WebServer:
                 Json.dump({}, file, indent=4)
             self.logger.error("ERROR: Could Not Find File /settings/extensions.json, Created New File Instead")
 
-        if not os.path.isfile("./settings/users.json"):
-            with open("./settings/users.json", 'w') as file:
+        if not os.path.isfile("./settings/server.json"):
+            with open("./settings/extensions.json", 'w') as file:
                 Json.dump({}, file, indent=4)
-            self.logger.error("ERROR: Could Not Find File /settings/users.json, Created New File Instead")
+            self.logger.error("ERROR: Could Not Find File /settings/server.json, Created New File Instead")
 
         if not os.path.isfile("./logs/log.txt"):
             file = open("./logs/log.txt", 'x')
