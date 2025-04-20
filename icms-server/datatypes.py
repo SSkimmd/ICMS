@@ -2,7 +2,6 @@ import asyncio
 import bcrypt
 from enum import Enum
 
-
 class RequestType(Enum):
     AUTHENTICATE = 0
     POST = 1
@@ -61,13 +60,14 @@ class Connection:
         self.writer: asyncio.StreamWriter = writer
         self.reader: asyncio.StreamReader = reader
         self.device: Device = None
-        self.connection_token: str = None
 
 
 class Device:
-    def __init__(self, device_name, device_type):
+    def __init__(self, device_name, device_type, device_token: str = None):
         self.device_name: str = device_name
         self.device_type: str = device_type
+        self.device_token: str = device_token
+
 
 class User:
     def __init__(self, username: str, password: str, token: str = "", id: int = -1):

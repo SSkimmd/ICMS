@@ -21,6 +21,9 @@ from flask import Response
 from datatypes import Device, Connection, User
 from flask_cors import CORS
 from streamserver import Server as StreamServer
+from database import db_create_user, db_get_user_by_username, db_get_user_by_id, db_get_users
+
+
 
 async def get_user_id(token: str = None):
     logger = logging.getLogger("gunicorn.error")
@@ -94,23 +97,9 @@ class WebServer:
             file = open("./logs/log.txt", 'x')
 
     def init_users(self):
-        with open("./settings/users.json") as file:
-            users = Json.loads(file.read())
-
-            for user in users:
-                usr: User = User(
-                    user, 
-                    users[user]['password'], 
-                    users[user]['current_token'], 
-                    users[user]['id']
-                )
-                
-                usr.is_admin = users[user]['is_admin']
-                usr.devices = users[user]['devices']
-                usr.pinned_extensions = users[user]['pinned_extensions']
-                usr.roles = users[user]['roles']
-
-                self.users.append(usr)
+        self.users: list[User] = asyncio.run(db_get_users())
+        for user in self.users:
+            print(user.username)
 
     def init_extensions(self):
         with open("./settings/extensions.json") as file:
@@ -151,7 +140,7 @@ class WebServer:
                 return Response(status=400, response="ERROR: Authorization Header Not Found")
 
             user_id = await get_user_id(token)
-            user: User = await self.get_user_by_id(user_id=user_id)
+            user: User = await self.get_user_with_id(user_id=user_id)
 
             if user is None:
                 return Response(status=400, response="ERROR: User Not Found")
@@ -162,84 +151,51 @@ class WebServer:
             return await f(self, *args, user, **kwargs)
         return decorated    
 
-    async def get_user_by_id(self, user_id: int):
-        if len(self.users) == 0:
-            return
-
-        for user in self.users:
-            if user.id == user_id:
-                return user
-
-        user = await self.get_user_from_file(user_id)
-        self.users.append(user)
-        return user
-
-    async def get_user_from_file(self, user_id: int = None, username: str = None):
-        with open("./settings/users.json") as file:
-            users = Json.loads(file.read())
-
-            for user in users:
-                if users[user]['id'] == user_id or user == username:
-                    self.logger.info(f'INFO: User Loaded From File: {user}')
-
-                    usr: User = User(
-                        user, 
-                        users[user]['password'], 
-                        users[user]['current_token'], 
-                        users[user]['id']
-                    )
-                    
-                    usr.is_admin = users[user]['is_admin']
-                    usr.devices = users[user]['devices']
-                    usr.pinned_extensions = users[user]['pinned_extensions']
-                    usr.roles = users[user]['roles']
-                    return usr 
-
     async def get_user_with_credentials(self, credentials):
         if "username" not in credentials or "password" not in credentials:
             return None
         
         password: bytes = credentials["password"]
+        username: str = credentials["username"]
 
         for user in self.users:
             if user is None: continue
 
             if user.username == credentials["username"]:
                 if bcrypt.checkpw(password, user.password.encode('utf-8')):
+                    self.logger.info(f'INFO: Retrieved User From Cache: Users {len(self.users)}')
                     return user
 
-        user = await self.get_user_from_file(username=credentials["username"])
+        user: User = await db_get_user_by_username(username)
 
         if user is None:
             return None
 
-        if not bcrypt.checkpw(password, user.password.encode('utf-8')):
-            return None
+        if bcrypt.checkpw(password, user.password.encode('utf-8')):
+            self.users.append(user)
+            self.logger.info(f'INFO: Retrieved User From Database: Users {len(self.users)}')
+            return user
         
+        return None
+        
+    async def get_user_with_id(self, user_id: int):
+        for user in self.users:
+            if user.id == user_id:
+                return user
+            
+        user: User = await db_get_user_by_id(user_id)
         return user
-
-    async def create_user(self, user: User):
-        users = None
-        with open("./settings/users.json", 'r') as file:
-            users = Json.loads(file.read())
-
-        if user.username in users:
-            return False
-
+        
+    async def create_new_user(self, user: User):
         password = bcrypt.hashpw(user.password.encode('utf-8'), bcrypt.gensalt()).decode()
+        user.password = password
 
-        with open("./settings/users.json", 'w') as file:
-            users[user.username] = {
-                "id": user.id,
-                "password": password,
-                "current_token": user.current_token,
-                "devices": user.devices,
-                "pinned_extensions": user.pinned_extensions,
-                "is_admin": user.is_admin,
-                "roles": user.roles                
-            }
-
-            Json.dump(users, file, indent=4)
+        try:
+            await db_create_user(user)
+            self.logger.info("SUCCESS: Created New User")
+        except Exception as e:
+            self.logger.error(repr(e))
+            return False
         return True
 
     async def user_login(self):
@@ -268,7 +224,6 @@ class WebServer:
         if user is None:
             return Response(status=400, response="ERROR: User Not Found (Login)")
 
-
         try:
             decoded = jwt.api_jwt.decode(user.current_token, "secret", algorithms=["HS256"])
         except:
@@ -279,8 +234,6 @@ class WebServer:
             return Response(status=400, response="ERROR: User Not Found")
         
         self.logger.info(f'SUCCESS: User Logged In: {user.username}')
-        self.users.append(user)
-
         return Response(status=200, response=Json.dumps({ "token": user.current_token }), mimetype="application/json")
     
     async def user_register(self):
@@ -317,7 +270,7 @@ class WebServer:
 
         created = None
         try:
-            created = await self.create_user(user)
+            created = await self.create_new_user(user)
         except Exception as e:
             print(repr(e))
 

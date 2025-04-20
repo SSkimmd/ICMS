@@ -1,4 +1,5 @@
 import asyncio
+import datetime
 import json as Json
 import os
 import re
@@ -10,14 +11,14 @@ import logging
 import ssl
 import uuid
 import pickle
+import jwt
 
 import extension as Extension
 from asyncio import CancelledError
 from datatypes import Device, Connection, User, Callback, RequestType, PostType, GetType
 from datatypes import AuthenticateRequest
-
 from pydoc import locate
-
+from jwt import api_jwt
 
 class Server:
     def __init__(self, host: str, port: int, ssl_context = None, extensions: map = None):
@@ -200,11 +201,18 @@ class Server:
 
         if bcrypt.checkpw(request.password.encode(), user.password.encode()):
             connection: Connection = await self.get_connection(request.connection_id)
-            connection.device = Device(request.device_name, request.device_type)
-            connection.connection_token = "newtoken"
+
+            token: str = api_jwt.encode({
+                    "device_name": request.device_name,
+                    "exp": datetime.datetime.now() + datetime.timedelta(days=30)
+                },
+                "secret",
+                algorithm="HS256"
+            )
+
+            connection.device = Device(request.device_name, request.device_type, token)
             user.connections.append(connection)
             return "SUCCESS: Authenticated Device"
-
         return "ERROR: Incorrect Username Or Password"
 
     # get device from a user using the username of an authenticated account
@@ -249,32 +257,36 @@ class Server:
         request_type: RequestType = RequestType[request['type']] 
 
         if request_type == RequestType.AUTHENTICATE:
-            username: str = request['username']
-            password: str = request['password']
+            username: str =    request['username']
+            password: str =    request['password']
             device_name: str = request['device']
             device_type: str = request['devicetype']
             auth_request: AuthenticateRequest = AuthenticateRequest(connection.uuid, username, password, device_name, device_type)
             await self.authenticate(auth_request)
 
-        if connection.connection_token is None:
-            return "ERROR: Connection Has Not Been Authenticated"
-
+        if connection.device is None:
+            return "ERROR: Device Not Found"
+        
+        if connection.device.device_token is None:
+            return "ERROR: Device Not Authenticated"
+        
         if request_type == RequestType.GET:
-            getType: GetType = GetType[request['GET']['type']]
+            get_type: GetType = GetType[request['GET']['type']]
 
-            if getType == GetType.DEVICE:
+            if get_type == GetType.DEVICE:
                 device_name: str = request['GET']['device']         
                 await self.get_device(device_name)
 
-            if getType == GetType.EXTENSION:
+            if get_type == GetType.EXTENSION:
                 extension_name: str = request['GET']['extension']
                 await self.get_extensions(extension_name)
 
         if request_type == RequestType.POST:
-            postType: PostType = PostType[request['POST']['type']]
+            #this should be a post request
+            post_type: PostType = PostType[request['POST']['type']]
 
-            if postType == PostType.DEVICE:
-                device_name: str = request['POST']['device']
+            if post_type == PostType.DEVICE:
+                device_name: str =  request['POST']['device']
                 post_request: str = request['POST']['request']
                 await self.call_device(post_request)
                    
@@ -283,11 +295,11 @@ class Server:
     async def on_recieved(self, data: bytes, connection: Connection):    
         data = data.decode('utf-8')
  
-        #try: 
-        request = Json.loads(data) 
-        response = await self.on_request(request, connection)
-        #except Exception as e:
-        #    self.logger.info(f'ERROR: {repr(e)}') 
+        try: 
+            request = Json.loads(data) 
+            response = await self.on_request(request, connection)
+        except Exception as e:
+            self.logger.info(f'ERROR: {repr(e)}') 
 
 
     async def on_connected(self, connection: Connection):
