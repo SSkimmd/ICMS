@@ -50,7 +50,7 @@ class StoreServer:
                 #); 
                 #"""
                 #await db.execute(table)
-                #await db.execute("INSERT INTO devices (name, date) VALUES ('RPI Pico-W', '1')")
+                #await db.execute("INSERT INTO devices (name, type, date) VALUES ('RPI Pico-W', '', 1)")
                 #await db.commit()
                 return Response(status=200, response={})
         except Exception as e:

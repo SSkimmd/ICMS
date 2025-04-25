@@ -59,7 +59,7 @@ class LEDS(Extension):
     
     # connect led controller
     async def connect(self, device_name):
-        device = await self.server.get_connection(name=device_name)
+        device = await self.server.get_connection()
 
         if device is None: return "ERROR: Device Doesn't Exist"
         
