@@ -21,7 +21,7 @@ from flask import Response
 from datatypes import Device, Connection, User
 from flask_cors import CORS
 from streamserver import Server as StreamServer
-from database import db_create_user, db_get_user_by_username, db_get_user_by_id, db_get_users
+from database import db_create_user, db_get_user_by_username, db_get_user_by_id, db_get_users, reset_database
 
 
 
