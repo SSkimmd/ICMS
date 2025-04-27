@@ -11,5 +11,5 @@
     "auth": {
         "mode": "local"
     },
-    "started": true
+    "started": false
 }
