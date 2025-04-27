@@ -10,5 +10,6 @@
     },
     "auth": {
         "mode": "local"
-    }
+    },
+    "started": true
 }

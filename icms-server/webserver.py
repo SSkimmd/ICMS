@@ -21,7 +21,7 @@ from flask import Response
 from datatypes import Device, Connection, User
 from flask_cors import CORS
 from streamserver import Server as StreamServer
-from database import db_create_user, db_get_user_by_username, db_get_user_by_id, db_get_users, reset_database
+from database import db_create_user, db_get_user_by_username, db_get_user_by_id, db_get_users, db_create_database
 
 
 
@@ -97,9 +97,30 @@ class WebServer:
             file = open("./logs/log.txt", 'x')
 
     def init_users(self):
-        self.users: list[User] = asyncio.run(db_get_users())
-        for user in self.users:
-            print(user.username)
+        with open("./settings/server.json", 'r') as file:
+            json = Json.load(file)
+            started = json["started"]
+
+            if started:
+                self.users: list[User] = asyncio.run(db_get_users())
+                for user in self.users:
+                    self.logger.info(f'Loaded User: {user.username}')
+            else:
+                try:
+                    self.logger.info("INFO: Application Is Being Run For The First Time")
+                    asyncio.run(db_create_database())
+                    json["started"] = True
+                except Exception as e:
+                    self.logger.error(f'ERROR: {repr(e)}')
+                    self.logger.info("INFO: Try Deleting The database.db File And Restarting")
+
+        if json is None:
+            return None
+        
+        if not started:
+            with open("./settings/server.json", 'w') as file:
+                self.logger.info("INFO: First Start Complete")
+                Json.dump(json, file, indent=4)
 
     def init_extensions(self):
         with open("./settings/extensions.json") as file:

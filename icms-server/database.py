@@ -23,6 +23,22 @@ async def reset_database():
         await db.execute(table)
         await db.commit()
 
+async def db_create_database():
+    async with aiosqlite.connect('database.db') as db:
+        table = """
+        CREATE TABLE users (
+            id INTEGER PRIMARY KEY,
+            token TEXT NOT NULL,
+            username TEXT NOT NULL,
+            password TEXT NOT NULL,
+            devices TEXT NOT NULL,
+            admin BOOLEAN NOT NULL,
+            roles TEXT NOT NULL
+        ); 
+        """
+        await db.execute(table)
+        await db.commit()    
+
 async def db_get_user_by_id(user_id: int) -> User:
     async with aiosqlite.connect('database.db') as db:
         query = "SELECT * FROM users WHERE id = ?"
