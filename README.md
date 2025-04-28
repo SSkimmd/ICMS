@@ -22,7 +22,27 @@ Run The Command:
 ./run.sh
 ```
 
-
+# Using The WebApp
+### Dashboard
+The dashboard is where you will find all the important information about the server.
+# Using The Server
+### Connecting A New Device
+New devices can be easily paired through the WebApp when the device is listed in the available connections.\
+Another way to connect a device if an account has already been created and logged in, is to authenticate directly using the device.
+### Authenticating With A Device
+The pakcet of data sent will follow JSON syntax.
+```json
+{
+  "type": "AUTHENTICATE",
+  "username": "exampleUsername",
+  "password": "examplePassword",
+  "device": "exampleDeviceName",
+  "devicetype": "both"
+}
+```
+# Extensions
+### Installing An Extension
+### Extension Functions
 
 
 
