@@ -13,12 +13,12 @@ docker compose up
 Installation on a windows system will by default require the usage of WSL - [Get WSL](https://learn.microsoft.com/en-us/windows/wsl/install)
 ### When In The /icms-app Directory
 Run The Command:
-```
+```powershell
 npm run host
 ```
 ### When In The /icms-server Directory
 Run The Command:
-```
+```bash
 ./run.sh
 ```
 
@@ -43,8 +43,8 @@ This requests consists of the follow JSON data:
 ```
 # Extensions
 ### Installing An Extension
-Installing an extension is as simple as placing the folder extracted from the file and updating the extensions.json file found in /settings\
-```
+Installing an extension is as simple as placing the folder extracted from the file and updating the extensions.json file found in /settings
+```json
 {
   "exampleExtension": {
     "lib": "exampleExtension.entrypoint",
