@@ -64,7 +64,7 @@ class exampleExtension(Extension):
   async def cool_function(self):
     print('this function isnt cool')
 ```
-An added benefit of creating functions this way is being able to specify function arguments:
+An added benefit of creating functions this way is being able to specify function arguments with types:
 ```python
 class exampleExtension(Extension):
   def __init__(self, server):
@@ -72,6 +72,7 @@ class exampleExtension(Extension):
     self.register(cool_function, {
       "coolness": "int"
     })
+
   async def cool_function(self, coolness: int):
     print(f'this function is this cool: {coolness}')
 ```
