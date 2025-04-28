@@ -18,11 +18,11 @@ When starting the application using Docker a link to the webapp will be displaye
 
 # Manually
 When using the applications, both applications will need to be started manually.
-## When In The Webapp Directory
+### When In The Webapp Directory
 ```
 npm run host
 ```
-## When In The Server Directory
+### When In The Server Directory
 ```
 ./run.sh
 ```
