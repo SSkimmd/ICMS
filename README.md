@@ -18,11 +18,13 @@ When starting the application using Docker a link to the webapp will be displaye
 
 # Manually
 When using the applications, both applications will need to be started manually.
-### When In The Webapp Directory
+### When In The /icms-app Directory
+Run The Command:
 ```
 npm run host
 ```
-### When In The Server Directory
+### When In The /icms-server Directory
+Run The Command:
 ```
 ./run.sh
 ```
