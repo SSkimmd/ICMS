@@ -27,10 +27,10 @@ Run The Command:
 The dashboard is where you will find all the important information about the server.
 # Using The Server
 ### Connecting A New Device
-New devices can be easily paired through the WebApp when the device is listed in the available connections.\
+New devices can be easily paired through the WebApp when the device is listed in the available connections\
 Another way to connect a device if an account has already been created and logged in, is to authenticate directly using the device.
 ### Authenticate Using A Device
-At the most basic level an authenticate request is being sent to the server.\
+At the most basic level an authenticate request is being sent to the server\
 This requests consists of the follow JSON data:
 ```json
 {
@@ -43,6 +43,15 @@ This requests consists of the follow JSON data:
 ```
 # Extensions
 ### Installing An Extension
+Installing an extension is as simple as placing the folder extracted from the file and updating the extensions.json file found in /settings\
+```
+{
+  "exampleExtension": {
+    "lib": "exampleExtension.entrypoint",
+    "enabled": true
+  }
+}
+```
 ### Extension Functions
 
 
