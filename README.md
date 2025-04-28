@@ -30,7 +30,8 @@ The dashboard is where you will find all the important information about the ser
 New devices can be easily paired through the WebApp when the device is listed in the available connections.\
 Another way to connect a device if an account has already been created and logged in, is to authenticate directly using the device.
 ### Authenticating With A Device
-The pakcet of data sent will follow JSON syntax.
+At the most basic level an authenticate request is being sent to the server.\
+This requests consists of the follow JSON data:
 ```json
 {
   "type": "AUTHENTICATE",
