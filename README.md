@@ -41,6 +41,32 @@ This requests consists of the follow JSON data:
   "devicetype": "both"
 }
 ```
+### Sending A Request
+There are a couple of different types of requests available:
+```json
+{
+  "type": "GET",
+  "GET": {
+    "type": "DEVICE",
+    "device": "exampleDeviceName"
+  }
+}
+```
+```json
+{
+  "type": "POST",
+  "POST": {
+    "type": "EXTENSION",
+    "request": {
+      "module": "exampleExtension",
+      "function": "cool_function",
+      "arguments": {
+        "coolness": 999
+      }
+    }
+  }
+}
+```
 # Extensions
 ### Installing An Extension
 Installing an extension is as simple as placing the folder extracted from the file and updating the extensions.json file found in /settings
