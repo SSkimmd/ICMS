@@ -78,8 +78,7 @@ class User:
         self.password: str = password
         self.current_token: str = token
 
-        self.devices: dict[str, str] = {}
-
+        self.devices: list[Device] = []
         self.connections: list[Connection] = []
         
         self.pinned_extensions: list[str] = []

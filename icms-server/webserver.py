@@ -212,12 +212,12 @@ class WebServer:
         user.password = password
 
         try:
-            await db_create_user(user)
+            user: User = await db_create_user(user)
             self.logger.info("SUCCESS: Created New User")
+            return user
         except Exception as e:
             self.logger.error(repr(e))
-            return False
-        return True
+            return None
 
     async def user_login(self):
         """
@@ -254,7 +254,7 @@ class WebServer:
         if user is None:
             return Response(status=400, response="ERROR: User Not Found")
         
-        self.logger.info(f'SUCCESS: User Logged In: {user.username}')
+        self.logger.info(f'SUCCESS: User Logged In: {user.username}, ID: {user.id}')
         return Response(status=200, response=Json.dumps({ "token": user.current_token }), mimetype="application/json")
     
     async def user_register(self):
@@ -269,39 +269,16 @@ class WebServer:
         username = data["username"]
         password = data["password"]
 
-        user_id = len(self.users)
-        user_token = None
+        user: User = await self.create_new_user(User(username, password))
 
-        try:
-            user_token = jwt.api_jwt.encode(
-                {
-                    "user_id": user_id,
-                    "exp": datetime.datetime.now() + datetime.timedelta(days=30)
-                },
-                "secret",
-                algorithm="HS256"
-            )
-        except:
-            return Response(status=400, response="ERROR: Failed To Generate User Token")
+        if user is None:
+            return Response(status=400, response="ERROR: Could Not Create User") 
         
-        if user_token is None:
-            return Response(status=400, response="ERROR: Failed To Generate User Token")
-
-        user: User = User(username, password, token=user_token, id=user_id)
-
-        created = None
-        try:
-            created = await self.create_new_user(user)
-        except Exception as e:
-            print(repr(e))
-
-        if created is None:
-            return Response(status=400, response="ERROR: Failed To Create User")
-
+        self.logger.info(f'INFO: Generated New User With ID: {user.id}')
         self.users.append(user)
 
         return Response(status=200, response=Json.dumps({
-            "token": user_token
+            "token": user.current_token
         }), mimetype="application/json")
     
     @requires_account
@@ -321,25 +298,8 @@ class WebServer:
     
     @requires_account
     async def get_devices(self, user: User = None):
-        devices = self.server.devices
-        devices_response = {}
-
-        if devices is None:
-            return Response(400, response="ERROR: Device Error")
-
-        for device in devices:
-            connection: Connection = await self.server.get_connection(connection_name=device)
-            
-            if connection is None:
-                continue
-            
-            devices_response[device] = {
-                "device_name": devices[device].device_name,
-                "device_type": devices[device].device_type,
-                "device_endpoints": connection.endpoints
-            }
-
-        return Response(status=200, response=Json.dumps(devices_response), mimetype="application/json")
+        devices = user.devices
+        return Response(status=200, response=Json.dumps(devices), mimetype="application/json")
     
     @requires_account
     async def call_device(self, user: User = None):
@@ -350,15 +310,7 @@ class WebServer:
     
     @requires_account
     async def get_connections(self, user: User = None): 
-        connections = self.server.connections
-        connections_response = []
-        for connection in connections:
-            if connections[connection].device is not None:
-                continue
-
-            name = connections[connection].connection_name
-            connections_response.append(name)
-
+        connections_response = {}
         return Response(status=200, response=Json.dumps(connections_response), mimetype="application/json")
 
     @requires_account

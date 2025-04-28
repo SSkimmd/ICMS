@@ -3,6 +3,8 @@ import aiosqlite
 import bcrypt
 import asyncio
 import json
+import jwt.api_jwt
+import datetime
 
 
 async def reset_database():
@@ -85,7 +87,20 @@ async def db_get_users() -> list[User]:
 
         return users
 
-async def db_create_user(user: User) -> None:
+async def generate_user_token(user_id: int) -> str:
+    user_token = jwt.api_jwt.encode(
+        {
+            "user_id": user_id,
+            "exp": datetime.datetime.now() + datetime.timedelta(days=30)
+        },
+        "secret",
+        algorithm="HS256"
+    )
+
+    return user_token
+
+
+async def db_create_user(user: User) -> User:
     async with aiosqlite.connect('database.db') as db:
         query = """
         INSERT INTO users (
@@ -100,8 +115,26 @@ async def db_create_user(user: User) -> None:
         devices = json.dumps(user.devices)
         roles = json.dumps(user.roles)
 
-        await db.execute(query, (user.current_token, user.username, user.password, devices, user.is_admin, roles))
+        await db.execute(query, ('', user.username, user.password, devices, user.is_admin, roles))
         await db.commit()
+
+        #this is a horrible hack to try and generate an id using the database       
+        #select the user after adding it to the database with no token
+        #this is literally only so it will generate an id for us 
+        query = "SELECT * FROM users WHERE username = ?"
+        cursor = await db.execute(query, (user.username, ))
+        row = await cursor.fetchone()
+        user: User = await from_row(row)
+
+        #generate a token and then update the database row with the new user token
+        token: str = await generate_user_token(user.id)
+        query = "UPDATE users SET token = ? WHERE username = ?"
+        await db.execute(query, (token, user.username))
+        await db.commit()
+
+        #make the current user token the generated token
+        user.current_token = token
+        return user
 
 if __name__ == "__main__":
     #asyncio.run(reset_database())

@@ -212,6 +212,7 @@ class Server:
 
             connection.device = Device(request.device_name, request.device_type, token)
             user.connections.append(connection)
+            user.devices.append(connection.device)
             return "SUCCESS: Authenticated Device"
         return "ERROR: Incorrect Username Or Password"
 
@@ -262,7 +263,7 @@ class Server:
             device_name: str = request['device']
             device_type: str = request['devicetype']
             auth_request: AuthenticateRequest = AuthenticateRequest(connection.uuid, username, password, device_name, device_type)
-            await self.authenticate(auth_request)
+            self.logger.info(await self.authenticate(auth_request))
 
         if connection.device is None:
             return "ERROR: Device Not Found"
@@ -282,13 +283,16 @@ class Server:
                 await self.get_extensions(extension_name)
 
         if request_type == RequestType.POST:
-            #this should be a post request
             post_type: PostType = PostType[request['POST']['type']]
 
             if post_type == PostType.DEVICE:
                 device_name: str =  request['POST']['device']
                 post_request: str = request['POST']['request']
                 await self.call_device(post_request)
+
+            if post_type == PostType.EXTENSION:
+                post_request: str = request['POST']['request']
+                self.logger.info(repr(await self.call_function(post_request)))
                    
         return "ERROR: Failed To Process Request"
 
