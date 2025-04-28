@@ -10,7 +10,8 @@ docker compose build
 docker compose up
 ```
 ### Manual
-Installation on a windows system will by default require the usage of WSL [Install WSL](https://learn.microsoft.com/en-us/windows/wsl/install).  
+Installation on a windows system will by default require the usage of WSL - [Install WSL](https://learn.microsoft.com/en-us/windows/wsl/install). 
+-
 When using the applications, both applications will need to be started manually.
 ### When In The /icms-app Directory
 Run The Command:
