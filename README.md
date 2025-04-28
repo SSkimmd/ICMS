@@ -56,19 +56,24 @@ Installing an extension is as simple as placing the folder extracted from the fi
 When creating an extension it is important to register functions with the server in order for them to become usable\
 The Extension class has built in support for this using the following code:
 ```python
-async def cool_function(coolness: int)
-  print(coolness)
+class exampleExtension(Extension):
+  def __init__(self, server):
+    super.__init__(server)
+    self.register(cool_function)
 
-self.register(cool_function)
+  async def cool_function(self):
+    print('this function isnt cool')
 ```
 An added benefit of creating functions this way is being able to specify function arguments:
 ```python
-async def cool_function(coolness: int)
-  print(coolness)
-
-self.register(cool_function, {#
-  "coolness": "int"
-})
+class exampleExtension(Extension):
+  def __init__(self, server):
+    super.__init__(server)
+    self.register(cool_function, {
+      "coolness": "int"
+    })
+  async def cool_function(self, coolness: int):
+    print(f'this function is this cool: {coolness}')
 ```
 
 
