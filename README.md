@@ -85,7 +85,7 @@ The Extension class has built in support for this using the following code:
 class exampleExtension(Extension):
   def __init__(self, server):
     super.__init__(server)
-    self.register(cool_function)
+    self.register_function(cool_function)
 
   async def cool_function(self):
     print('this function isnt cool')
@@ -95,7 +95,7 @@ An added benefit of creating functions this way is being able to specify functio
 class exampleExtension(Extension):
   def __init__(self, server):
     super.__init__(server)
-    self.register(cool_function, {
+    self.register_function(cool_function, {
       "coolness": "int"
     })
 
